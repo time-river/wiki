@@ -3,9 +3,13 @@
 
 # river's wiki
 
+## 计算机编程语言
+
+- C
+
 ## 操作系统
 
-- 系统调用
+- [系统调用](/operation-system/syscall)
 	- [用户态的系统调用过程](/operation-system/syscall/user-space)
 	- [内核态的系统调用过程](/operation-system/syscall/kernel-space)
 
