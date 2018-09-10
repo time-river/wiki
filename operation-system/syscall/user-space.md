@@ -1,7 +1,7 @@
 <!-- TITLE: 用户态的系统调用过程 -->
 <!-- SUBTITLE: A quick summary of User Space -->
 
-# 如何使用C语言进行系统调用 [1][1][2][2]
+# 如何使用C语言进行系统调用
 在AMD64平台的Linux下，使用C标准库中的`printf`写一个“hello world”：
 
 ```c
@@ -80,7 +80,7 @@ int main(void) {
 }
 ```
 
-它等价于[2][2]：
+它等价于[1][3]：
 
 ```c
 int main(void) {
