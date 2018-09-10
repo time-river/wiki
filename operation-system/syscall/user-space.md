@@ -1,7 +1,7 @@
 <!-- TITLE: 用户态的系统调用过程 -->
 <!-- SUBTITLE: A quick summary of User Space -->
 
-# 如何使用C语言进行系统调用[1][1]
+# 如何使用C语言进行系统调用 [1][1][2][2]
 在AMD64平台的Linux下，使用C标准库中的`printf`写一个“hello world”：
 
 ```c
@@ -80,10 +80,22 @@ int main(void) {
 }
 ```
 
+它等价于[2][2]：
 
+```c
+int main(void) {
+    register char* arg2 asm("rsi") = "hello world!\n";
+    asm("mov $1, %rax; mov $1, %rdi; mov $13, %rdx; syscall;");
+    return 0;
+}
+```
+
+# glibc中对syscall的实现
 # References
 - [How to make a system call in C][1]
 - [Hello world in C inline assembly][2]
+- [Reading a register value into a C variable][3]
 
 [1]: https://jameshfisher.com/2018/02/19/how-to-syscall-in-c.html "How to make a system call in C"
 [2]: https://jameshfisher.com/2018/02/20/c-inline-assembly-hello-world.html "Hello world in C inline assembly"
+[3]: https://stackoverflow.com/questions/2114163/reading-a-register-value-into-a-c-variable "Reading a register value into a C variable"
