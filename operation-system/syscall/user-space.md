@@ -48,7 +48,7 @@ int main(void) {
 
 而`syscall`，在glibc中，由一段汇编代码定义：
 
-```asm
+```assembler
 /*  sysdeps/unix/sysv/linux/x86_64/syscall.S */
 .text
 ENTRY (syscall)
@@ -91,6 +91,7 @@ int main(void) {
 ```
 
 # glibc中对syscall的实现
+
 # References
 - [How to make a system call in C][1]
 - [Hello world in C inline assembly][2]
