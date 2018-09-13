@@ -25,7 +25,8 @@ Credentials在Linux中用于访问控制（Access Control），基于*uid*、*gi
 | `getfsuid` | `getfsgid` |
 | `capget` | `catset` |
 # Pre-Internal
-## [A new approach to user namespaces][3]
+## namespace
+> [A new approach to user namespaces][3]
 # Internal
 
 
