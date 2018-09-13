@@ -14,16 +14,12 @@ Credentials在Linux中用于访问控制（Access Control），基于*uid*、*gi
 
 在v4.12中，与此有关的系统调用有以下16个：
 
-| | |
-| --: | --: | 
-| `getuid` | `setuid` |
-| `geteuid` | `seteuid` |
-| `getresuid` | `setresuid` |
-| `getgid` | `setgid` |
-| `getegid` | `setegid` |
-| `getresgid` | `setresgid` |
-| `getfsuid` | `getfsgid` |
-| `capget` | `catset` |
+| | | | |
+| --: | --: | --: | --: |
+| `getuid` | `setuid` | `getgid` | `setgid` |
+| `geteuid` | `seteuid` | `getegid` | `setegid` |
+| `getresuid` | `setresuid` | `getresgid` | `setresgid` |
+| `getfsuid` | `getfsgid` | `capget` | `catset` |
 # Pre-Internal
 ## user namespace
 > [A new approach to user namespaces][3]梗概：
