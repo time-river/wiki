@@ -17,10 +17,9 @@ Credentials在Linux中用于访问控制（Access Control），基于*uid*、*gi
 | | | | |
 | --: | --: | --: | --: |
 | `getuid` | `setuid` | `getgid` | `setgid` |
-| `geteuid` | `seteuid` | `getegid` | `setegid` |
 | `getresuid` | `setresuid` | `getresgid` | `setresgid` |
+| `geteuid` |`getegid` | `setreuid` | `setregid` |
 | `getfsuid` | `getfsgid` | `capget` | `catset` |
-
 # Introduction
 
 # Pre-Internal
