@@ -24,10 +24,12 @@ Credentials在Linux中用于访问控制（Access Control），基于*uid*、*gi
 | `getresgid` | `setresgid` |
 | `getfsuid` | `getfsgid` |
 | `capget` | `catset` |
-# Background
-
+# Pre-Internal
+## [A new approach to user namespaces][3]
+# Internal
 
 
 # Reference
 [1]: https://www.kernel.org/doc/html/v4.17/security/credentials.html#task-credentials "Credentials in Linux#task-credentials"
 [2]: https://zh.wikipedia.org/wiki/%E7%94%A8%E6%88%B7ID "用户ID"
+[3]: https://lwn.net/Articles/491310/ "A new approach to user namespaces"
