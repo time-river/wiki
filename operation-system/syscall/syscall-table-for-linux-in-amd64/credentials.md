@@ -12,6 +12,19 @@ Credentials在Linux中用于访问控制（Access Control），基于*uid*、*gi
   	-  *fsuid* —— File System UID，文件系统用户ID。
 * *gid* —— Group Identifier，用户组标识符，用户辨识用户组。也又分为*egid*、*rgid*、*sgid*、*fsgid*。
 
+在v4.12中，与此有关的系统调用有以下16个：
+
+| :--: | :--: | 
+| `getuid` | `setuid` |
+| `geteuid` | `seteuid` |
+| `getresuid` | `setresuid` |
+| `getgid` | `setgid` |
+| `getegid` | `setegid` |
+| `getresgid` | `setresgid` |
+| `getfsuid` | `getfsgid` |
+| `capget` | `catset` |
+
+
 # Background
 
 
