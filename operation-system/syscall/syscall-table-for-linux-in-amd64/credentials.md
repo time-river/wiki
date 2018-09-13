@@ -14,6 +14,7 @@ Credentials在Linux中用于访问控制（Access Control），基于*uid*、*gi
 
 在v4.12中，与此有关的系统调用有以下16个：
 
+| | |
 | :--: | :--: | 
 | `getuid` | `setuid` |
 | `geteuid` | `seteuid` |
@@ -23,8 +24,6 @@ Credentials在Linux中用于访问控制（Access Control），基于*uid*、*gi
 | `getresgid` | `setresgid` |
 | `getfsuid` | `getfsgid` |
 | `capget` | `catset` |
-
-
 # Background
 
 
