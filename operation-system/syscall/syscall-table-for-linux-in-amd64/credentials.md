@@ -31,11 +31,11 @@ Credentials在Linux中用于访问控制（Access Control），基于*uid*、*gi
 > Eric Biederman提交了一组patch解决了这个问题。这组patch中定义了两种新的数据类型`kuid_t`（Kernel UID）与`kgid_t`（Kernel GID）。Kernel UID用于描述进程在内核中的身份，而不管它在容器中可能采用的任何*uid*；它是用于大多数特权检查的值；并且进程并没有办法知道它的值。
 > 为了kernel ID与user ID、group ID在不同的命名空间中做转换，除了知道Kernel ID之外，还需要知道特定的namespace ID，因此有了下面的一组用于*uid*的转换函数（*gid*同样存在）：
 > ```c
-    kuid_t make_kuid(struct user_namespace *from, uid_t uid);
-    uid_t from_kuid(struct user_namespace *to, kuid_t kuid);
-    uid_t from_kuid_munged(struct user_namespace *to, kuid_t kuid);
-    bool kuid_has_mapping(struct user_namespace *ns, kuid_t uid);
-		```
+>   kuid_t make_kuid(struct user_namespace *from, uid_t uid);
+>   uid_t from_kuid(struct user_namespace *to, kuid_t kuid);
+>   uid_t from_kuid_munged(struct user_namespace *to, kuid_t kuid);
+>   bool kuid_has_mapping(struct user_namespace *ns, kuid_t uid);
+>	```
 > 在Kernel与user ID、group ID之间建立映射是一种特权操作，需要`CAP_SETUID, CAP_SETGID`标志。
 
 # Internal
