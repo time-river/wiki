@@ -1,5 +1,4 @@
 <!-- TITLE: Credentials -->
-<!-- SUBTITLE: A quick summary of Credentials -->
 
 # Overview
 Credentials在Linux中用于访问控制（Access Control），基于*uid*、*gid*、*sid*，是Linux几种安全措施的一部分。同时，仅用于进程（task）中的Capabilities提供了更细化的权限控制机制。[1][1]
