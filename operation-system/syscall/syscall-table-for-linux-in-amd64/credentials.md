@@ -34,9 +34,11 @@ Note[2][2]：
 -  *Supplementary group IDs*：它是一组额外的group IDs，也用于文件、共享资源的访问控制。
 
 Note[5][5][6][6][7][7]：
-*Set-user-id / Set-group-id*区别于进程中的*saved set-user-ID / saved set-group-ID*，是文件上的概念。设置一个*Saved set-user-ID*的意义在于，在`execv`可执行文件之后，如果可执行文件的*set-user-ID*位被设置了，进程的*effective user ID, saved set-user-ID*会设置成可执行文件所有者的*uid*；*effective group ID*也有类似的操作。
+*Set-user-id / Set-group-id*区别于进程中的*saved set-user-ID / saved set-group-ID*，是文件上的概念。设置一个*Saved set-user-ID*的意义在于，在`execv`可执行文件之后，如果可执行文件的*set-user-ID*位被设置了，进程的*effective user ID, saved set-user-ID*会设置成可执行文件所有者的*uid*；*effective group ID*也有类似的操作。下面是内核z中与此有关的具体代码：
 > ```c
-> /* fs/exec.c */
+> /* 
+>  * fs/exec.c
+>  */
 > prepare_binprm
 >  - bprm_fill_uid
 >     if (mode & S_ISUID) {
