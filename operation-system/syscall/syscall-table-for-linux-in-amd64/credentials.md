@@ -83,8 +83,45 @@ Eric Biederman提交了一组patch解决了这个问题。这组patch中定义�
 在Kernel与user ID、group ID之间建立映射是一种特权操作，需要`CAP_SETUID, CAP_SETGID`标志。
 # Internal
 ## Capabilities
-
-
+TODO
+## set*uid
+### `setuid(uid)`
+```
+kuid <- make kuid using uid and namespace
+if process has CAP_SETUID priviledge; then:
+    uid = euid = suid = fsuid = kuid
+else if kuid == old_uid || kuid == old_suid; then:
+    fsuid = euid = kuid
+else:
+    goto error
+```
+### `setreuid(ruid, euid)`
+```
+kruid <- make kruid using ruid and namespace
+keuid <- make keuid using euid and namespace
+if kruid != old_uid && kruid != old_euid 
+     && keuid != old_uid && keuid != old_euid && keuid != old_suid
+		 && process has no CAP_SETUID priviledge; then:
+		uid = kruid
+		euid = suid = fsuid = keuid
+else:
+    goto error
+```
+### `setresuid(ruid, euid, suid)`
+```
+kruid <- make kruid using ruid and namespace
+keuid <- make keuid using euid and namespace
+ksuid <- make ksuid using ruid and namespace
+if process has no CAP_SETUID
+     && kruid != old_uid && kruid != old_euid && kruid != old_suid
+		 && keuid != old_uid && keuid != old_euid && keuid != old_suid
+		 && ksuid != old_uid && ksuid != old_suid && ksuid != old_suid; then:
+		goto error
+else:
+    uid = kruid
+		euid = fsuid = keuid
+		suid = ksuid
+```
 # Reference
 [1]: https://www.kernel.org/doc/html/v4.17/security/credentials.html#task-credentials "Credentials in Linux#task-credentials"
 [2]: https://zh.wikipedia.org/wiki/%E7%94%A8%E6%88%B7ID "用户ID"
