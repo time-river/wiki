@@ -12,7 +12,7 @@ Credentials在Linux中用于访问控制（Access Control），基于*uid*、*gi
   	-  *fsuid* —— File System UID，文件系统用户ID。
 * *gid* —— Group Identifier，用户组标识符，用户辨识用户组。也又分为*rgid*、*egid*、*sgid*、*fsgid*。因每个用户必须是一个组的成员，主组（*the primary group*）由组数据库中用户条目的数字*gid*标识。
 
-在v4.12中，与进程访问控制的系统调用有以下18个：
+在v4.12中，与进程访问控制有关的系统调用有以下18个：
 
 | | |
 | --: | --: |
@@ -30,7 +30,7 @@ Credentials在Linux中用于访问控制（Access Control），基于*uid*、*gi
 - *Effective user ID / Effective group ID*：内核利用这些ID决定进程对共享资源拥有怎样的访问权，比如：消息队列、共享内存和信号量。尽管大多数的UNIX系统使用这些ID决定文件的访问权，但Linux使用的是独有的*filesystem ID*。
 - *Saved set-user-ID / Saved set-group-ID*：这两个ID在*set-user-ID*与*set-group-ID*程序执行后，保存相应的*effective ID*。因此，一个*set-user-ID*程序的*effective user ID*可以在*real user ID*与*saved set-user-ID*之间来回切换，从而可以恢复/抛弃特权。
 - *Filesystem user ID / Filesystem group ID*：这些ID用于决定进程对文件与其他共享资源的访问权。进程无论何时更改*effective user/group ID*，内核也同时更改*filesystem user/group ID*。
--  *Supplementary group IDs*：它是一组除了*gid*之外的group IDs，也用于文件、共享资源的访问控制。
+-  *Supplementary group IDs*：它是一组额外的group IDs，也用于文件、共享资源的访问控制。
 # Pre-Internal
 ## User namespace
 [A new approach to user namespaces][3]梗概：
@@ -52,7 +52,6 @@ Eric Biederman提交了一组patch解决了这个问题。这组patch中定义�
 
 在Kernel与user ID、group ID之间建立映射是一种特权操作，需要`CAP_SETUID, CAP_SETGID`标志。
 # Internal
-
 ## Capabilities
 
 
