@@ -62,6 +62,8 @@ Note[5][5][6][6][7][7]：
 > 
 > 现在进程访问完zzz的文件了，又想回到hzzz的环境中执行，所以有可能会调用setuid（hzzz），这次saved uid的作用就表现出来了，因为刚刚只是改变了effective uid, 而saved uid还保存着之前的effective uid，所以可以调用setuid（hzzz）来要回原来的权限。
 
+描述*uid/gid*转换的有限状态自动机（FSA）在[Proceedings of the 11th USENIX Security Symposium][8]中的第10-12页有展示。
+
 # Pre-Internal
 ## User namespace
 A new approach to user namespaces[3][3]梗概：
@@ -84,8 +86,6 @@ Eric Biederman提交了一组patch解决了这个问题。这组patch中定义�
 在Kernel与user ID、group ID之间建立映射是一种特权操作，需要`CAP_SETUID, CAP_SETGID`标志。
 
 # Internal
-## Capabilities
-TODO
 ## `set*uid`
 ### `setuid(uid)`
 ```
@@ -128,10 +128,21 @@ else:
 the same as `set*uid`.
 
 # Reference
-[1]: https://www.kernel.org/doc/html/v4.17/security/credentials.html#task-credentials "Credentials in Linux#task-credentials"
-[2]: https://zh.wikipedia.org/wiki/%E7%94%A8%E6%88%B7ID "用户ID"
-[3]: https://lwn.net/Articles/491310/ "A new approach to user namespaces"
+
+- [Linux doc: Credentials in Linux#task-credentials][1]
+- [Wikipedia: 用户ID][2]
+- [LWN.net: A new approach to user namespaces][3]
+- [Linux Programmer's Manual: credentials - process identifiers][4]
+- [setuid和seteuid][5]
+- [set-user-id (suid), set-group-id (sgid), saved-suid 筆記][6]
+- [深刻理解——real user id, effective user id, saved user id in Linux][7]
+- [Proceedings of the 11th USENIX Security Symposium][8]
+
+[1]: https://www.kernel.org/doc/html/v4.17/security/credentials.html#task-credentials "Linux doc: Credentials in Linux#task-credentials"
+[2]: https://zh.wikipedia.org/wiki/%E7%94%A8%E6%88%B7ID "Wikipedia: 用户ID"
+[3]: https://lwn.net/Articles/491310/ "LWN.net: A new approach to user namespaces"
 [4]: http://man7.org/linux/man-pages/man7/credentials.7.html "Linux Programmer's Manual: credentials - process identifiers"
 [5]: https://lengzzz.com/note/archive-20140117 "setuid和seteuid"
 [6]: https://kenlosolid.blogspot.com/2010/11/set-user-id-suid-set-group-id-sgid.html "set-user-id (suid), set-group-id (sgid), saved-suid 筆記"
 [7]: https://blog.csdn.net/fmeng23/article/details/23115989 "深刻理解——real user id, effective user id, saved user id in Linux"
+[8]: https://www.usenix.org/legacy/event/sec02/full_papers/chen/chen.pdf "Proceedings of the 11th USENIX Security Symposium"
