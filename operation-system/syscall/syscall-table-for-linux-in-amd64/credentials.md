@@ -2,7 +2,7 @@
 <!-- SUBTITLE: A quick summary of Credentials -->
 
 # Overview
-Credentials在Linux中用于访问控制（Access Control），基于*uid*、*gid*、*sid*，是Linux几种安全措施的一部分。同时，仅用于进程（task）中的Capabilities提供了更细化的权限控制机制。[1]
+Credentials在Linux中用于访问控制（Access Control），基于*uid*、*gid*、*sid*，是Linux几种安全措施的一部分。同时，仅用于进程（task）中的Capabilities提供了更细化的权限控制机制。[1][1]
 
 [Note][2]：
 * *uid* —— User Identifier，用户标识符，用于辨识用户。又分为*euid*、*ruid*、*suid*、*fsuid*。
@@ -12,7 +12,7 @@ Credentials在Linux中用于访问控制（Access Control），基于*uid*、*gi
   	-  *fsuid* —— File System UID，文件系统用户ID。
 * *gid* —— Group Identifier，用户组标识符，用户辨识用户组。也又分为*egid*、*rgid*、*sgid*、*fsgid*。
 
-在v4.12中，与此有关的系统调用有以下16个：
+在v4.12中，与进程有关的访问控制系统调用有以下16个：
 
 | | | | |
 | --: | --: | --: | --: |
@@ -21,7 +21,10 @@ Credentials在Linux中用于访问控制（Access Control），基于*uid*、*gi
 | `geteuid` |`getegid` | `setreuid` | `setregid` |
 | `getfsuid` | `getfsgid` | `capget` | `catset` |
 # Introduction
-
+*Real user ID / Real group ID*：这些ID决定该进程的所有者是谁。
+*Effective user ID / Effective group ID*：内核利用这些ID决定进程对共享资源拥有怎样的访问权限，比如：消息队列、共享内存和信号量。尽管大多数的UNIX系统使用这些ID决定文件的访问权限，但Linux使用的是独有的*filesystem ID*。
+*Saved set-user-ID / Saved set-group-ID*：这两个ID在*set-user-ID*与*set-group-ID*程序执行后，保存相应的*effective ID*。因此，一个*set-user-ID*程序的*effective user ID*可以在*real user ID*与*saved set-user-ID*之间来回切换，从而可以恢复/抛弃特权。
+*Filesystem user ID / Filesystem group ID*：
 # Pre-Internal
 ## User namespace
 > [A new approach to user namespaces][3]梗概：
