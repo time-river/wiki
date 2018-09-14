@@ -4,7 +4,7 @@
 # Overview
 Credentials在Linux中用于访问控制（Access Control），基于*uid*、*gid*、*sid*，是Linux几种安全措施的一部分。同时，仅用于进程（task）中的Capabilities提供了更细化的权限控制机制。[1][1]
 
-[Note][2]：
+Note[2][2]：
 * *uid* —— User Identifier，用户标识符，用于辨识用户。又分为*euid*、*ruid*、*suid*、*fsuid*。
   	- *ruid* —— Real UID，真实用户ID，一般称之为*uid*。
   	- *euid* —— Effective UID，有效用户ID。
@@ -26,17 +26,35 @@ Credentials在Linux中用于访问控制（Access Control），基于*uid*、*gi
 | `getfsuid` | `getfsgid` | 
 | `capget` | `catset` |
 # Introduction
+一些概念[4][4]：
 - *Real user ID / Real group ID*：这些ID决定该进程的所有者是谁。
 - *Effective user ID / Effective group ID*：内核利用这些ID决定进程对共享资源拥有怎样的访问权，比如：消息队列、共享内存和信号量。尽管大多数的UNIX系统使用这些ID决定文件的访问权，但Linux使用的是独有的*filesystem ID*。
 - *Saved set-user-ID / Saved set-group-ID*：这两个ID在*set-user-ID*与*set-group-ID*程序执行后，保存相应的*effective ID*。因此，一个*set-user-ID*程序的*effective user ID*可以在*real user ID*与*saved set-user-ID*之间来回切换，从而可以恢复/抛弃特权。
 - *Filesystem user ID / Filesystem group ID*：这些ID用于决定进程对文件与其他共享资源的访问权。进程无论何时更改*effective user/group ID*，内核也同时更改*filesystem user/group ID*。
 -  *Supplementary group IDs*：它是一组额外的group IDs，也用于文件、共享资源的访问控制。
 
-Note：
-
+Note[5][5][6][6][7][7]：
+*Set-user-id / Set-group-id*区别于进程中的*saved set-user-ID / saved set-group-ID*，是文件上的概念。设置一个*Saved set-user-ID*的意义在于，在`execv`可执行文件之后，如果可执行文件的*set-user-ID*位被设置了，进程的*effective user ID, saved set-user-ID*会设置成可执行文件所有者的*uid*；*effective group ID*也有类似的操作。
+> ```c
+> /* fs/exec.c */
+> prepare_binprm
+>  - bprm_fill_uid
+>     if (mode & S_ISUID) {
+>         bprm->per_clear |= PER_CLEAR_ON_SETID;
+>         bprm->cred->euid = uid;
+>     }
+> 
+>     if ((mode & (S_ISGID | S_IXGRP)) == (S_ISGID | S_IXGRP)) {
+>         bprm->per_clear |= PER_CLEAR_ON_SETID;
+>         bprm->cred->egid = gid;
+>     }
+>  - security_bprm_set_creds
+>     new->suid = new->fsuid = new->euid;
+>     new->sgid = new->fsgid = new->egid;
+> ```
 # Pre-Internal
 ## User namespace
-[A new approach to user namespaces][3]梗概：
+A new approach to user namespaces[3][3]梗概：
 
 容器可以被看做一种轻量级的虚拟化技术。因为与宿主机共享内核，所以比真正的虚拟机运行效率更高。但必须提供一种机制，把全局可见的资源封装进命名空间中，对容器展现只属于自己的那部分资源（比如进程ID、文件系统、网络接口）的视图。
 
@@ -62,4 +80,7 @@ Eric Biederman提交了一组patch解决了这个问题。这组patch中定义�
 [1]: https://www.kernel.org/doc/html/v4.17/security/credentials.html#task-credentials "Credentials in Linux#task-credentials"
 [2]: https://zh.wikipedia.org/wiki/%E7%94%A8%E6%88%B7ID "用户ID"
 [3]: https://lwn.net/Articles/491310/ "A new approach to user namespaces"
-[4]: http://man7.org/linux/man-pages/man7/credentials.7.html "http://man7.org/linux/man-pages/man7/credentials.7.html" "Linux Programmer's Manual: credentials - process identifiers"
+[4]: http://man7.org/linux/man-pages/man7/credentials.7.html "Linux Programmer's Manual: credentials - process identifiers"
+[5]: https://lengzzz.com/note/archive-20140117 "setuid和seteuid"
+[6]: https://kenlosolid.blogspot.com/2010/11/set-user-id-suid-set-group-id-sgid.html "set-user-id (suid), set-group-id (sgid), saved-suid 筆記"
+[7]: https://blog.csdn.net/fmeng23/article/details/23115989 "深刻理解——real user id, effective user id, saved user id in Linux"
