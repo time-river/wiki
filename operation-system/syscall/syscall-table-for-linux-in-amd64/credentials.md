@@ -24,10 +24,8 @@ Credentials在Linux中用于访问控制（Access Control），基于*uid*、*gi
 - *Real user ID / Real group ID*：这些ID决定该进程的所有者是谁。
 - *Effective user ID / Effective group ID*：内核利用这些ID决定进程对共享资源拥有怎样的访问权，比如：消息队列、共享内存和信号量。尽管大多数的UNIX系统使用这些ID决定文件的访问权，但Linux使用的是独有的*filesystem ID*。
 - *Saved set-user-ID / Saved set-group-ID*：这两个ID在*set-user-ID*与*set-group-ID*程序执行后，保存相应的*effective ID*。因此，一个*set-user-ID*程序的*effective user ID*可以在*real user ID*与*saved set-user-ID*之间来回切换，从而可以恢复/抛弃特权。
-*Filesystem user ID / Filesystem group ID*：这些ID用于决定进程对文件与其他共享资源的访问权。进程无论何时更改*effective user/group ID*，内核也同时更改*filesystem user/group ID*。
-* 
-
-
+- *Filesystem user ID / Filesystem group ID*：这些ID用于决定进程对文件与其他共享资源的访问权。进程无论何时更改*effective user/group ID*，内核也同时更改*filesystem user/group ID*。
+-  *Supplementary group IDs*：它是一组除了*gid*之外的group IDs，也用于文件、共享资源的访问控制。
 # Pre-Internal
 ## User namespace
 > [A new approach to user namespaces][3]梗概：
