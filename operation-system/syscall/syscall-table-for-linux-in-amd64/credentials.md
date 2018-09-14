@@ -25,6 +25,7 @@ Note[2][2]：
 | `getgroups` | `setgroups` |
 | `getfsuid` | `getfsgid` | 
 | `capget` | `catset` |
+
 # Introduction
 一些概念[4][4]：
 - *Real user ID / Real group ID*：这些ID决定该进程的所有者是谁。
@@ -81,10 +82,11 @@ Eric Biederman提交了一组patch解决了这个问题。这组patch中定义�
 ```
 
 在Kernel与user ID、group ID之间建立映射是一种特权操作，需要`CAP_SETUID, CAP_SETGID`标志。
+
 # Internal
 ## Capabilities
 TODO
-## set*uid
+## `set*uid`
 ### `setuid(uid)`
 ```
 kuid <- make kuid using uid and namespace
@@ -122,6 +124,9 @@ else:
     euid = fsuid = keuid
     suid = ksuid
 ```
+## `set*gid`
+the same as `set*uid`.
+
 # Reference
 [1]: https://www.kernel.org/doc/html/v4.17/security/credentials.html#task-credentials "Credentials in Linux#task-credentials"
 [2]: https://zh.wikipedia.org/wiki/%E7%94%A8%E6%88%B7ID "用户ID"
