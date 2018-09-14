@@ -34,7 +34,7 @@ Note[2][2]：
 -  *Supplementary group IDs*：它是一组额外的group IDs，也用于文件、共享资源的访问控制。
 
 Note[5][5][6][6][7][7]：
-*Set-user-id / Set-group-id*区别于进程中的*saved set-user-ID / saved set-group-ID*，是文件上的概念。设置一个*Saved set-user-ID*的意义在于，在`execv`可执行文件之后，如果可执行文件的*set-user-ID*位被设置了，进程的*effective user ID, saved set-user-ID*会设置成可执行文件所有者的*uid*；*effective group ID*也有类似的操作。下面是内核z中与此有关的具体代码：
+*Set-user-id / Set-group-id*区别于进程中的*saved set-user-ID / saved set-group-ID*，是文件上的概念。设置一个*Saved set-user-ID*的意义在于，在`execv`可执行文件之后，如果可执行文件的*set-user-ID*位被设置了，进程的*effective user ID, saved set-user-ID*会设置成可执行文件所有者的*uid*；*effective group ID*也有类似的操作。下面是内核中与此有关的具体代码：
 > ```c
 > /* 
 >  * fs/exec.c
@@ -54,6 +54,13 @@ Note[5][5][6][6][7][7]：
 >     new->suid = new->fsuid = new->euid;
 >     new->sgid = new->fsgid = new->egid;
 > ```
+
+> 举例说明：用户zzz执行了文件a.out，a.out的属主为hzzz且设置了set-user-ID位。现在本进程的real uid为zzz，effective uid = saved uid = hzzz。
+> 
+> 进程执行了一会之后，突然想用zzz的权限访问一个文件，于是进程可能会调用setuid（zzz）， 此时检测进程的权限，进程的effective uid是hzzz，不是root，所以不能更改real uid（只有root才能更改real uid），所以只能设置effective uid，发现effective uid可以被设置为zzz（因为real uid是zzz），所以函数调用成功，只将effective uid设置成zzz。
+> 
+> 现在进程访问完zzz的文件了，又想回到hzzz的环境中执行，所以有可能会调用setuid（hzzz），这次saved uid的作用就表现出来了，因为刚刚只是改变了effective uid, 而saved uid还保存着之前的effective uid，所以可以调用setuid（hzzz）来要回原来的权限。
+
 # Pre-Internal
 ## User namespace
 A new approach to user namespaces[3][3]梗概：
