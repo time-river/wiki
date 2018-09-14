@@ -101,9 +101,9 @@ kruid <- make kruid using ruid and namespace
 keuid <- make keuid using euid and namespace
 if kruid != old_uid && kruid != old_euid 
      && keuid != old_uid && keuid != old_euid && keuid != old_suid
-		 && process has no CAP_SETUID priviledge; then:
-		uid = kruid
-		euid = suid = fsuid = keuid
+     && process has no CAP_SETUID priviledge; then:
+    uid = kruid
+    euid = suid = fsuid = keuid
 else:
     goto error
 ```
@@ -114,13 +114,13 @@ keuid <- make keuid using euid and namespace
 ksuid <- make ksuid using ruid and namespace
 if process has no CAP_SETUID
      && kruid != old_uid && kruid != old_euid && kruid != old_suid
-		 && keuid != old_uid && keuid != old_euid && keuid != old_suid
-		 && ksuid != old_uid && ksuid != old_suid && ksuid != old_suid; then:
-		goto error
+     && keuid != old_uid && keuid != old_euid && keuid != old_suid
+     && ksuid != old_uid && ksuid != old_suid && ksuid != old_suid; then:
+    goto error
 else:
     uid = kruid
-		euid = fsuid = keuid
-		suid = ksuid
+    euid = fsuid = keuid
+    suid = ksuid
 ```
 # Reference
 [1]: https://www.kernel.org/doc/html/v4.17/security/credentials.html#task-credentials "Credentials in Linux#task-credentials"
