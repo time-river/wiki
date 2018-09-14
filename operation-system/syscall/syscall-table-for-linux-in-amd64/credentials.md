@@ -31,6 +31,9 @@ Credentials在Linux中用于访问控制（Access Control），基于*uid*、*gi
 - *Saved set-user-ID / Saved set-group-ID*：这两个ID在*set-user-ID*与*set-group-ID*程序执行后，保存相应的*effective ID*。因此，一个*set-user-ID*程序的*effective user ID*可以在*real user ID*与*saved set-user-ID*之间来回切换，从而可以恢复/抛弃特权。
 - *Filesystem user ID / Filesystem group ID*：这些ID用于决定进程对文件与其他共享资源的访问权。进程无论何时更改*effective user/group ID*，内核也同时更改*filesystem user/group ID*。
 -  *Supplementary group IDs*：它是一组额外的group IDs，也用于文件、共享资源的访问控制。
+
+Note：
+
 # Pre-Internal
 ## User namespace
 [A new approach to user namespaces][3]梗概：
@@ -59,3 +62,4 @@ Eric Biederman提交了一组patch解决了这个问题。这组patch中定义�
 [1]: https://www.kernel.org/doc/html/v4.17/security/credentials.html#task-credentials "Credentials in Linux#task-credentials"
 [2]: https://zh.wikipedia.org/wiki/%E7%94%A8%E6%88%B7ID "用户ID"
 [3]: https://lwn.net/Articles/491310/ "A new approach to user namespaces"
+[4]: http://man7.org/linux/man-pages/man7/credentials.7.html "http://man7.org/linux/man-pages/man7/credentials.7.html" "Linux Programmer's Manual: credentials - process identifiers"
