@@ -29,12 +29,12 @@ Note[2][2]：
 一些概念[4][4]：
 - *Real user ID / Real group ID*：这些ID决定该进程的所有者是谁。
 - *Effective user ID / Effective group ID*：内核利用这些ID决定进程对共享资源拥有怎样的访问权，比如：消息队列、共享内存和信号量。尽管大多数的UNIX系统使用这些ID决定文件的访问权，但Linux使用的是独有的*filesystem ID*。
-- *Saved set-user-ID / Saved set-group-ID*：这两个ID在*set-user-ID*与*set-group-ID*程序执行后，保存相应的*effective ID*。因此，一个*set-user-ID*程序的*effective user ID*可以在*real user ID*与*saved set-user-ID*之间来回切换，从而可以恢复/抛弃特权。
+- *Saved set-user-ID / Saved set-group-ID*：这两个ID在*set-user-ID*与*set-group-ID*程序执行后，保存相应的*effective ID*。因此，__一个*set-user-ID*程序的*effective user ID*可以在*real user ID*与*saved set-user-ID*之间来回切换，从而可以恢复/抛弃特权__。
 - *Filesystem user ID / Filesystem group ID*：这些ID用于决定进程对文件与其他共享资源的访问权。进程无论何时更改*effective user/group ID*，内核也同时更改*filesystem user/group ID*。
 -  *Supplementary group IDs*：它是一组额外的group IDs，也用于文件、共享资源的访问控制。
 
 Note[5][5][6][6][7][7]：
-*Set-user-id / Set-group-id*区别于进程中的*saved set-user-ID / saved set-group-ID*，是文件上的概念。设置一个*Saved set-user-ID*的意义在于，在`execv`可执行文件之后，如果可执行文件的*set-user-ID*位被设置了，进程的*effective user ID, saved set-user-ID*会设置成可执行文件所有者的*uid*；*effective group ID*也有类似的操作。下面是内核中与此有关的具体代码：
+*Set-user-id / Set-group-id*区别于进程中的*saved set-user-ID / saved set-group-ID*，是文件上的概念。设置一个*Saved set-user-ID*的意义在于，在`execv`可执行文件之后，__如果可执行文件的*set-user-ID*位被设置了，进程的*effective user ID, saved set-user-ID*会设置成可执行文件所有者的*uid*__；*effective group ID*也有类似的操作。下面是内核中与此有关的具体代码：
 > ```c
 > /* 
 >  * fs/exec.c
@@ -62,6 +62,8 @@ Note[5][5][6][6][7][7]：
 > 现在进程访问完zzz的文件了，又想回到hzzz的环境中执行，所以有可能会调用setuid（hzzz），这次saved uid的作用就表现出来了，因为刚刚只是改变了effective uid, 而saved uid还保存着之前的effective uid，所以可以调用setuid（hzzz）来要回原来的权限。
 
 描述*uid/gid*转换的有限状态自动机（FSA）在[Proceedings of the 11th USENIX Security Symposium][8]中的第10-12页有展示。
+
+**关于`setuid`可以简单记为：在没有特权的情况下，`euid / fsuid`可以通过`setuid`设置成`ruid`或`suid`。**
 
 # Pre-internal
 ## User namespaces
