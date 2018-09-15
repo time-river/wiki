@@ -1,5 +1,5 @@
 <!-- TITLE: Credentials -->
-
+<!-- SUBTITLE: 09/15/2018完工 -->
 # Overview
 Credentials在Linux中用于访问控制（Access Control），基于*uid*、*gid*、*sid*，是Linux几种安全措施的一部分。同时，仅用于进程（task）中的Capabilities提供了更细化的权限控制机制。[1][1]
 
@@ -64,12 +64,12 @@ Note[5][5][6][6][7][7]：
 描述*uid/gid*转换的有限状态自动机（FSA）在[Proceedings of the 11th USENIX Security Symposium][8]中的第10-12页有展示。
 
 # Pre-internal
-## User namespace
+## User namespaces
 A new approach to user namespaces[3][3]梗概：
 
 容器可以被看做一种轻量级的虚拟化技术。因为与宿主机共享内核，所以比真正的虚拟机运行效率更高。但必须提供一种机制，把全局可见的资源封装进命名空间中，对容器展现只属于自己的那部分资源（比如进程ID、文件系统、网络接口）的视图。
 
-用户命名空间（user namespace）可以被认为是user/group ID以及相关权限的封装，它允许容器的所有者进程（不一定为root用户）在容器内部以root的身份运行，同时将容器内用户与系统的其余部分隔离。那么，同一个进程怎样才能在不同的上下文中有不同的*uid*呢？
+用户命名空间（user namespaces）可以被认为是user/group ID以及相关权限的封装，它允许容器的所有者进程（不一定为root用户）在容器内部以root的身份运行，同时将容器内用户与系统的其余部分隔离。那么，同一个进程怎样才能在不同的上下文中有不同的*uid*呢？
 
 Eric Biederman提交了一组patch解决了这个问题。这组patch中定义了两种新的数据类型`kuid_t`（Kernel UID）与`kgid_t`（Kernel GID）。Kernel UID用于描述进程在内核中的身份，而不管它在容器中可能采用的任何*uid*；它是用于大多数特权检查的值；并且进程并没有办法知道它的值。
 
