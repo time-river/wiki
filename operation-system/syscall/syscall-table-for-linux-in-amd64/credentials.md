@@ -63,7 +63,7 @@ Note[5][5][6][6][7][7]：
 
 描述*uid/gid*转换的有限状态自动机（FSA）在[Proceedings of the 11th USENIX Security Symposium][8]中的第10-12页有展示。
 
-# Pre-Internal
+# Pre-internal
 ## User namespace
 A new approach to user namespaces[3][3]梗概：
 
@@ -128,14 +128,14 @@ the same as `set*uid`.
 
 # Reference
 
-- [Linux doc: Credentials in Linux#task-credentials][1]
-- [Wikipedia: 用户ID][2]
-- [LWN.net: A new approach to user namespaces][3]
-- [Linux Programmer's Manual: credentials - process identifiers][4]
-- [setuid和seteuid][5]
-- [set-user-id (suid), set-group-id (sgid), saved-suid 筆記][6]
-- [深刻理解——real user id, effective user id, saved user id in Linux][7]
-- [Proceedings of the 11th USENIX Security Symposium][8]
+1. [Linux doc: Credentials in Linux#task-credentials][1]
+2. [Wikipedia: 用户ID][2]
+3. [LWN.net: A new approach to user namespaces][3]
+4. [Linux Programmer's Manual: credentials - process identifiers][4]
+5. [setuid和seteuid][5]
+6. [set-user-id (suid), set-group-id (sgid), saved-suid 筆記][6]
+7. [深刻理解——real user id, effective user id, saved user id in Linux][7]
+8. [Proceedings of the 11th USENIX Security Symposium][8]
 
 [1]: https://www.kernel.org/doc/html/v4.17/security/credentials.html#task-credentials "Linux doc: Credentials in Linux#task-credentials"
 [2]: https://zh.wikipedia.org/wiki/%E7%94%A8%E6%88%B7ID "Wikipedia: 用户ID"
