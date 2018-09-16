@@ -40,6 +40,7 @@ Note: reference to [1][1][2][2][3][3]
 
 ## Overview of `struct task_struct`
 
+TODO: `real_parent` vs `parent` 
 # Internal
 ## `getpid` & `gettid`
 ```
