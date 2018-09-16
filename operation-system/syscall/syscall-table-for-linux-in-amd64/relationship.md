@@ -39,10 +39,11 @@ PID namespaces具有层级顺序，一个PID namespaces可以具有多个child P
 Note: reference to [1][1][2][2][3][3]
 
 ## Overview of `struct task_struct`
-
+### design
+TODO
 ### `real_parent` vs `parent`
 `struct task_struct`中有俩*parent*：
-```
+```c
 struct task_struct {
     ...
     /* Real parent process: */
@@ -57,6 +58,29 @@ Wikipedia中的parent process中有提到[4][4][5][5][6][6]，大意是：
 > Linux内核的process与POSIX threads差异极其小，对于每个进程/线程来说都有两种类型的parent process，分别为*real_parent*与*parent*。*Real_parent*仅仅是使用`clone`创建子进程/线程的的进程，对创建出来的进程/线程并没有控制权，而*parent*进程才是在子进程/线程中止的时候接收`SIGCHLD`的进程。通常情况下，他们的值是相同的；但对于POSIX threads来说，他们的值可能会有差异。
 # Internal
 ## `getpid` & `gettid` & `getpgrp` & `getpgid` & `getsid`
+在linux v4.12的*include/linux/pid.h*中定义了五种与进程/线程有关的id类型：
+```c
+enum pid_type
+{
+    PIDTYPE_PID,   // pid
+    PIDTYPE_PGID,  // pgid
+    PIDTYPE_SID,   // sid
+    PIDTYPE_MAX,
+    /* only valid to __task_pid_nr_ns() */
+    __PIDTYPE_TGID // tgid
+};
+```
+
+实际上，与进程有关的各类id都是*group_leader*的id，与线程有关的*tid*才是线程所属进程的*pid*。至于`__PIDTYPE_TGID`，它有着如下做法：
+```c
+        if (type != PIDTYPE_PID) {
+            if (type == __PIDTYPE_TGID)
+                type = PIDTYPE_PID;
+            task = task->group_leader;
+        }
+```
+
+因此，有了一下注释：
 ```
 /*
   * sys_getpid - return the thread group id of the current process
@@ -66,56 +90,23 @@ Wikipedia中的parent process中有提到[4][4][5][5][6][6]，大意是：
   * which case the tgid is the same in all threads of the same group.
   */
 SYSCALL_DEFINE0(getpid)
- - task_tgid_vnr(current)
-		- ns = task_active_pid_ns(current)
-    - task = current->group_leader
-    - pid = task->pids[PIDTYPE_PID].pid
-    - return pid->numbers[ns->level].nr
-```
+...
 
-```
 /* Thread ID - the internal kernel "pid" */
 SYSCALL_DEFINE0(gettid)
- - task_pid_vnr(current)
-    - ns = task_active_pid_ns(current)
-    - pid = current->pids[PIDTYPE_PID].pid
-    - return pid->numbers[ns->level].nr
+...
 ```
 
+TODO：图
+
+## `setsid`
+`setsid`的实现中，有这么一行代码：
 ```
-SYSCALL_DEFINE0(getpgrp)
- - return sys_getpgid(0)
+    proc_clear_tty(group_leader);
 ```
 
-```
-SYSCALL_DEFINE1(getpgid, pid_t, pid)
- - if (!pid)
-    - grp = task_pgrp(current)
-       - current->group_leader->pids[PIDTYPE_PGID].pid
-   else
-    - p = find_task_by_vpid(pid)
-    - grp = task_pgrp(current)
- - nr = grp->numbers[ns->level].nr
- - return nr
-```
-
-```
-SYSCALL_DEFINE1(getsid, pid_t, pid)
- - if (!pid)
-    - sid = task_session(current)
-       - current->group_leader->pids[PIDTYPE_SID].pid;
-   else
-    - p = find_task_by_vpid(pid)
-    - sid = task_session(p)
- - nr = sid->numbers[ns->level].nr
- - return nr
-```
-
-## `getppid`
-```
-SYSCALL_DEFINE0(getppid)
- - return task_tgid_vnr(current->real_parent)
-```
+《那些永不消逝的进程》[7][7]对此有了一些解释：
+TODO
 # References
 [1]: https://lwn.net/Articles/259217/ "LWN.net: PID namespaces in the 2.6.24 kernel"
 [2]: http://man7.org/linux/man-pages/man7/pid_namespaces.7.html "Linux Programmer's Manual: pid_namespaces"
@@ -123,3 +114,4 @@ SYSCALL_DEFINE0(getppid)
 [4]: https://en.wikipedia.org/wiki/Parent_process#Linux "Wikipedia: Parent process"
 [5]: https://ithelp.ithome.com.tw/articles/10185515 "trace 30個基本Linux系統呼叫第九日：getpid與getppid"
 [6]: https://sunnyeves.blogspot.com/2010/09/sneak-peek-into-linux-kernel-chapter-2.html "A Sneak-Peek into Linux Kernel - Chapter 2: Process Creation"
+[7]: https://www.ibm.com/developerworks/cn/linux/1702_zhangym_demo/index.html "那些永不消逝的进程"
