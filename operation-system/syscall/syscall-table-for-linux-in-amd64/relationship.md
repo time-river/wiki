@@ -40,8 +40,36 @@ Note: reference to [1][1][2][2][3][3]
 
 ## Overview of `struct task_struct`
 ### design
+#### 一个进程对应一个`struct task_struct`
+不考虑进程之间的关系、命名空间，仅仅是一个*pid*对应一个`struct task_struct`，可以设计如下数据结构：
+```c
+struct task_struct {
+    ...
+    struct pid_link pids;
+    ...
+};
+
+struct pid_link {
+    struct hlist_node node;
+    struct pid *pid;
+};
+
+struct pid {
+    int nr; // pid
+    struct hlist_node pid_chain; // pid hash table node
+    struct list_head pid_list; // 指回pid_link的node
+};
+```
+可以用下图描述：
 TODO
 
+上图中，
+- `pid_hash[]` —— 是一个hash表的结构，根据`struct pid`的*nr*值哈希到其某个表项，若有多个*nr*值对应到同一个表项，使用散列表法解决冲突。
+	 - 
+- `pid_map` —— 是一个位图，用来唯一分配*pid*值的结构。
+
+#### 进程区分了*id*类型
+TODO
 ### `real_parent` vs `parent`
 `struct task_struct`中有俩*parent*：
 ```c
@@ -98,9 +126,9 @@ SYSCALL_DEFINE0(gettid)
 ...
 ```
 
-下图展示了一个进程`fork`一次、每个进程再`pthread_create`两次的大致关系：
+下图展示了一个进程`fork`一次、每个进程再`pthread_create`两次的大致关系[8][8]：
 
-![pid & tid & grp & sid](/uploads/2018/pid-tid-grp-sid.png "pid & tid & grp & sid")：
+![pid & tid & grp & sid](/uploads/2018/pid-tid-grp-sid.png "pid & tid & grp & sid")
 
 ## `setsid`
 `setsid`的实现中，有这么一行代码：
@@ -131,3 +159,4 @@ TODD：Question —— 为什么当前进程为process group leader的时候要�
 [5]: https://ithelp.ithome.com.tw/articles/10185515 "trace 30個基本Linux系統呼叫第九日：getpid與getppid"
 [6]: https://sunnyeves.blogspot.com/2010/09/sneak-peek-into-linux-kernel-chapter-2.html "A Sneak-Peek into Linux Kernel - Chapter 2: Process Creation"
 [7]: https://www.ibm.com/developerworks/cn/linux/1702_zhangym_demo/index.html "那些永不消逝的进程"
+[8]: https://www.cnblogs.com/hazir/p/linux_kernel_pid.htm "Linux 内核进程管理之进程ID"
