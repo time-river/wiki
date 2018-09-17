@@ -41,6 +41,7 @@ Note: reference to [1][1][2][2][3][3]
 ## Overview of `struct task_struct`
 ### design
 TODO
+
 ### `real_parent` vs `parent`
 `struct task_struct`中有俩*parent*：
 ```c
@@ -80,7 +81,7 @@ enum pid_type
         }
 ```
 
-因此，源码中有了以下的注释：
+因此，源码中有了以下的注释（*thread group id*即*process group leader pid*）
 ```
 /*
   * sys_getpid - return the thread group id of the current process
@@ -97,7 +98,9 @@ SYSCALL_DEFINE0(gettid)
 ...
 ```
 
-TODO：图
+下图展示了一个进程`fork`一次、每个进程再`pthread_create`两次的大致关系：
+
+![pid & tid & grp & sid](/uploads/2018/pid-tid-grp-sid.png "pid & tid & grp & sid")：
 
 ## `setsid`
 `setsid`的实现中，有这么一行代码：
