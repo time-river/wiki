@@ -80,7 +80,7 @@ enum pid_type
         }
 ```
 
-因此，有了一下注释：
+因此，源码中有了以下的注释：
 ```
 /*
   * sys_getpid - return the thread group id of the current process
@@ -105,8 +105,21 @@ TODO：图
     proc_clear_tty(group_leader);
 ```
 
-《那些永不消逝的进程》[7][7]对此有了一些解释：
-TODO
+它的作用使脱离终端。《那些永不消逝的进程》[7][7]一文对此有相应的解释，梗概如下：
+
+忽略`SIGHUP`信号的子进程不会因父进程的退出而退出，这是通过*nohup*运行的子程序可以在后台保持运行、不随终端退出而中止的原理。但是，为什么忽略了`SIGHUP`信号的子进程就不会随着父进程的结束而消逝？在什么样的场景下，一个进程会收到`SIGHUP`信号呢？这与Linux系统中描述进程关系的两个术语*进程组（process group）*和*会话（session）*有关。
+
+在早期Unix的设计中，每当有一个终端（terminal）通过某一tty来访问服务器，一个包含login shell进程的进程组就会被建立起来，所有在该shell中被建立的进程都会自动隶属于同一进程组之下，同时该tty也会被设置成该进程组下所有进程共有的终端控制器（controlling terminal）。但是，进程组对控制终端缺乏有效的管理手段、所有进程无差别地共享控制终端等的设计带来了许多弊端。因此作业控制（job control）的概念被提了出来，会话的设计也被引入，简单地说：新的设计将控制终端（tty或pty）的访问和控制完全置于了会话的管理之下。
+
+`SIGHUP`是当终端连接中断或关闭时，直接或间接地被发送给会话中的所有进程组，一般进程对于该信号的默认处理方式也同样是终结自己。但是，*nohup*通过屏蔽`SIGHUP`的方式来实现守护进程并不理想，会出现缺少控制终端（`SIGHUP`不再起作用）、守护进程的工作目录无法`umount`等一系列问题。
+
+Glibc把实现守护进程所需的工作封装到了`daemon`函数中，通过`fork`创建出的子进程执行`setsid`、同时父进程退出来实现，并且执行`setsid`成功的进程不仅成为新的会话组长和新的进程组长，还不会关联任何终端。
+
+TODD：Question —— 为什么当前进程为process group leader的时候要使调用失败？
+```
+    if (pid_task(sid, PIDTYPE_PGID))
+        goto out;
+```
 # References
 [1]: https://lwn.net/Articles/259217/ "LWN.net: PID namespaces in the 2.6.24 kernel"
 [2]: http://man7.org/linux/man-pages/man7/pid_namespaces.7.html "Linux Programmer's Manual: pid_namespaces"
