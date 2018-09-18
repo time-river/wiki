@@ -30,7 +30,7 @@ Note：
 ## PID namespace
 PID namespaces隔离了进程ID，指的是不同的进程在不同的PID namespaces可以有着相同的PID。这个特性是在主机之间迁移容器的先决条件；只有一个PID namespaces的时候，在保持PID不变（保持PID不变是一种需求）的情况下将其迁移到另一个主机可能会失败，因为目标节点上可能存在相同PID的进程。
 
-PID namespaces具有层级顺序，一个PID namespaces可以具有多个child PID namespaces，每一个PID namespaces都可以看做parent PID namespaces的一个局部视图。一个新的PID namespaces *B*从当前PID namespaces *A*被创建后，处于当前PID namespaces *A*的进程可以看到*B*中的所有进程，但反之不成立。
+PID namespaces具有层级顺序，低级的PID namespaces对高级的不可见。一个PID namespaces可以具有多个child PID namespaces，每一个PID namespaces都可以看做parent PID namespaces的一个局部视图。一个新的PID namespaces *B*从当前PID namespaces *A*被创建后，处于当前PID namespaces *A*的进程可以看到*B*中的所有进程，但反之不成立。
 
 ![PID Namespaces](/uploads/2018/pid-namespaces.png "PID Namespaces")
 
@@ -57,7 +57,7 @@ struct pid_link {
 struct pid {
     int nr; // pid
     struct hlist_node pid_chain; // pid hash table node
-    struct list_head pid_list; // 指回pid_link的node
+    struct list_head tasks; // 指回pid_link的node
 };
 ```
 可以用下图描述：
@@ -65,11 +65,78 @@ TODO
 
 上图中，
 - `pid_hash[]` —— 是一个hash表的结构，根据`struct pid`的*nr*值哈希到其某个表项，若有多个*nr*值对应到同一个表项，使用散列表法解决冲突。
-	 - 
 - `pid_map` —— 是一个位图，用来唯一分配*pid*值的结构。
 
 #### 进程区分了*id*类型
+考虑到进程/线程之间的复杂关系，原来的`struct task_struct`中的`pid_link`需要增加几项，用以指向到其组长进程的*pid*，相应的`struct pid`也需要增加几项用以链接那些以该*pid*为组长的所有进程组组内进程：
+```c
+enum pid_type {
+    PIDTYPE_PID,
+    PIDTYPE_PGID,
+    PIDTYPE_SID,
+    PIDTYPE_MAX
+}；
+
+struct task_struct {
+    ...
+    struct pid_link pids[PIDTYPE_MAX];
+    struct task_struct *group_leader; // thread group leader
+		
+    struct pid_links pids[PIDTYPE_MAX];
+		...
+};
+
+struct pid_link {
+    struct hlist_node node;
+    struct pid *pid;
+};
+
+struct pid {
+    int nr; // pid
+    struct hlist_node pid_chain; // pid hash table node
+    struct list_head tasks[PIDTYPE_MAX]; // 指回pid_link的node
+};
+```
 TODO
+
+#### 增加了*pid namespaces*的`struct task_struct`
+在第二种情形下再增加*pid namespaces*，同一个进程在不同的*pid namespaces*下有不同的*pid*，因此新的数据结构如下：
+```c
+enum pid_type {
+    PIDTYPE_PID,
+    PIDTYPE_PGID,
+    PIDTYPE_SID,
+    PIDTYPE_MAX
+}；
+
+struct task_struct {
+    ...
+    struct pid_link pids[PIDTYPE_MAX];
+    struct task_struct *group_leader; // thread group leader
+		
+    struct pid_links pids[PIDTYPE_MAX];
+		...
+};
+
+struct pid_link {
+    struct hlist_node node;
+    struct pid *pid;
+};
+
+struct pid {
+    unsigned int level; // 表示pid namespaces level
+    struct list_head tasks[PIDTYPE_MAX]; // 指回pid_link的node
+    struct upid numbers[1]; // 指向特定命名空间的upid
+};
+
+struct upid {
+    int nr; // pid
+    struct pid_namespace *ns; // 该进程所属的命名空间
+    struct hlist_node pid_chain; // pid hash table node
+};
+```
+TODO
+
 ### `real_parent` vs `parent`
 `struct task_struct`中有俩*parent*：
 ```c
