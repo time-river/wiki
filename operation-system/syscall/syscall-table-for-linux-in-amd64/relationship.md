@@ -219,11 +219,27 @@ TODD：Question —— 为什么当前进程为process group leader的时候要�
         goto out;
 ```
 # References
+- [LWN.net: PID namespaces in the 2.6.24 kernel][1]
+- [Linux Programmer's Manual: pid_namespaces][2]
+- [Professional Linux Kernel Architecture - Linux][3]
+- [Wikipedia: Parent process][4]
+- [trace 30個基本Linux系統呼叫第九日：getpid與getppid][5]
+- [A Sneak-Peek into Linux Kernel - Chapter 2: Process Creation][6]
+- [IBM developerWorks：那些永不消逝的进程][7]
+- [cnblogs: Linux 内核进程管理之进程ID][8]
+- [CSDN: Linux中的进程关系详解][9]
+- [CSDN: Linux内核原理-pid namespace][10]
+- [LWN.net: Namespaces in operation, part 3: PID namespaces][11]
+- [CSDN: linux内核PID管理][12]
 [1]: https://lwn.net/Articles/259217/ "LWN.net: PID namespaces in the 2.6.24 kernel"
 [2]: http://man7.org/linux/man-pages/man7/pid_namespaces.7.html "Linux Programmer's Manual: pid_namespaces"
 [3]: https://cse.yeditepe.edu.tr/~kserdaroglu/spring2014/cse331/termproject/BOOKS/ProfessionalLinuxKernelArchitecture-WolfgangMauerer.pdf "Professional Linux Kernel Architecture - Linux"
 [4]: https://en.wikipedia.org/wiki/Parent_process#Linux "Wikipedia: Parent process"
 [5]: https://ithelp.ithome.com.tw/articles/10185515 "trace 30個基本Linux系統呼叫第九日：getpid與getppid"
 [6]: https://sunnyeves.blogspot.com/2010/09/sneak-peek-into-linux-kernel-chapter-2.html "A Sneak-Peek into Linux Kernel - Chapter 2: Process Creation"
-[7]: https://www.ibm.com/developerworks/cn/linux/1702_zhangym_demo/index.html "那些永不消逝的进程"
-[8]: https://www.cnblogs.com/hazir/p/linux_kernel_pid.htm "Linux 内核进程管理之进程ID"
+[7]: https://www.ibm.com/developerworks/cn/linux/1702_zhangym_demo/index.html "IBM developerWorks：那些永不消逝的进程"
+[8]: https://www.cnblogs.com/hazir/p/linux_kernel_pid.htm "cnblogs: Linux 内核进程管理之进程ID"
+[9]: https://blog.csdn.net/zhangyifei216/article/details/49705515 "CSDN: Linux中的进程关系详解"
+[10]: https://blog.csdn.net/zhangyifei216/article/details/49926459 "CSDN: Linux内核原理-pid namespace"
+[11]: https://lwn.net/Articles/531419/ "LWN.net: Namespaces in operation, part 3: PID namespaces"
+[12]: https://blog.csdn.net/zhanglei4214/article/details/6765913 "CSDN: linux内核PID管理"
