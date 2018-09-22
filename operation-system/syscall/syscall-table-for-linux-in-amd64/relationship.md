@@ -103,8 +103,8 @@ struct pid {
     struct hlist_node pid_chain; // pid hash table node
 };
 ```
-新的示意图如下：
-
+新的设计示意图如下：
+![task_struct design 2](/uploads/2018/task-struct-design-2.png "task_struct design 2"){:max-width="80%"}
 
 #### 增加了*pid namespaces*的`struct task_struct`
 在第二种情形下再增加*pid namespaces*，同一个进程在不同的*pid namespaces*下有不同的*pid*，因此新的数据结构如下：
