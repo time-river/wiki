@@ -257,9 +257,3 @@ TODD：Question —— 为什么当前进程为process group leader的时候要�
 [11]: https://lwn.net/Articles/531419/ "LWN.net: Namespaces in operation, part 3: PID namespaces"
 [12]: https://blog.csdn.net/zhanglei4214/article/details/6765913 "CSDN: linux内核PID管理"
 [13]: https://linux.cn/article-7321-1.html "Linux 内核里的数据结构——双向链表"
-
-<style type="text/css">
-img {
-max-width=80%;
-}
-</style>
