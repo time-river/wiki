@@ -103,8 +103,8 @@ struct pid {
     struct hlist_node pid_chain; // pid hash table node
 };
 ```
-新的设计示意图如下：
-![task_struct design 2](/uploads/2018/task-struct-design-2.png "task_struct design 2"){:max-width="80%"}
+新的结构设计示意图如下：
+![task_struct design 2](/uploads/2018/task-struct-design-2.png "task_struct design 2")
 
 #### 增加了*pid namespaces*的`struct task_struct`
 在第二种情形下再增加*pid namespaces*，同一个进程在不同的*pid namespaces*下有不同的*pid*，因此新的数据结构如下：
@@ -142,6 +142,9 @@ struct upid {
     struct pid_namespace *ns; // 该进程所属的命名空间
 };
 ```
+
+最终成了这样：
+![task_struct design 3](/uploads/2018/task-struct-design-3.png "task_struct design 3")
 
 Note：`upid`是`unique pid`的缩写。
 
@@ -254,3 +257,9 @@ TODD：Question —— 为什么当前进程为process group leader的时候要�
 [11]: https://lwn.net/Articles/531419/ "LWN.net: Namespaces in operation, part 3: PID namespaces"
 [12]: https://blog.csdn.net/zhanglei4214/article/details/6765913 "CSDN: linux内核PID管理"
 [13]: https://linux.cn/article-7321-1.html "Linux 内核里的数据结构——双向链表"
+
+<style type="text/css">
+img {
+max-width=80%;
+}
+</style>
