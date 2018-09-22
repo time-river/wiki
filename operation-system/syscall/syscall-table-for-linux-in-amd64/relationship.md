@@ -55,17 +55,23 @@ struct pid_link {
 };
 
 struct pid {
+    struct list_head tasks; // 指回pid_link的node
     int nr; // pid
     struct hlist_node pid_chain; // pid hash table node
-    struct list_head tasks; // 指回pid_link的node
 };
 ```
-可以用下图描述：
-TODO
+
+能用下图描述：
+![task_struct design 1](/uploads/2018/task-struct-design-1.png "task_struct design 1")
 
 上图中，
-- `pid_hash[]` —— 是一个hash表的结构，根据`struct pid`的*nr*值哈希到其某个表项，若有多个*nr*值对应到同一个表项，使用散列表法解决冲突。
-- `pid_map` —— 是一个位图，用来唯一分配*pid*值的结构。
+- `pid_hash[]` —— 是一个hash表的结构，根据`struct pid`的*nr*值哈希到其某个表项，若有多个*nr*值对应到同一个表项，则使用散列表法解决冲突。利用链表的`container_of`机制[13][13]可以利用`tasks`反向得到`task_struct`。
+- `pid_map` —— 是一个位图（bitmap），是用来唯一分配*pid*值的结构。
+
+这种设计可以达到：
+1. 快速地给新进程在可见的命名空间内分配一个唯一的*pid*
+2. 快速地利用`task_struct`找到`pid`
+3. 快速地利用`pid`反向得到`task_struct`
 
 #### 进程区分了*id*类型
 考虑到进程/线程之间的复杂关系，原来的`struct task_struct`中的`pid_link`需要增加几项，用以指向到其组长进程的*pid*，相应的`struct pid`也需要增加几项用以链接那些以该*pid*为组长的所有进程组组内进程：
@@ -92,12 +98,13 @@ struct pid_link {
 };
 
 struct pid {
+    struct list_head tasks[PIDTYPE_MAX]; // 指回pid_link的node
     int nr; // pid
     struct hlist_node pid_chain; // pid hash table node
-    struct list_head tasks[PIDTYPE_MAX]; // 指回pid_link的node
 };
 ```
-TODO
+新的示意图如下：
+
 
 #### 增加了*pid namespaces*的`struct task_struct`
 在第二种情形下再增加*pid namespaces*，同一个进程在不同的*pid namespaces*下有不同的*pid*，因此新的数据结构如下：
@@ -130,12 +137,13 @@ struct pid {
 };
 
 struct upid {
+    struct hlist_node pid_chain; // pid hash table node
     int nr; // pid
     struct pid_namespace *ns; // 该进程所属的命名空间
-    struct hlist_node pid_chain; // pid hash table node
 };
 ```
-TODO
+
+Note：`upid`是`unique pid`的缩写。
 
 ### `real_parent` vs `parent`
 `struct task_struct`中有俩*parent*：
@@ -245,3 +253,4 @@ TODD：Question —— 为什么当前进程为process group leader的时候要�
 [10]: https://blog.csdn.net/zhangyifei216/article/details/49926459 "CSDN: Linux内核原理-pid namespace"
 [11]: https://lwn.net/Articles/531419/ "LWN.net: Namespaces in operation, part 3: PID namespaces"
 [12]: https://blog.csdn.net/zhanglei4214/article/details/6765913 "CSDN: linux内核PID管理"
+[13]: https://linux.cn/article-7321-1.html "Linux 内核里的数据结构——双向链表"
