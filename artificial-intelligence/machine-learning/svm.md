@@ -65,7 +65,7 @@ $$
 
 硬间隔指的是：假设这些数据全部线性可分，即存在一个超平面能将不同类的样本完全划分开，所有样本都必须划分正确。
 
-为了最大化间隔，有：
+为了在最大化间隔下求得超平面，有：
 $$
 \begin{align}
 & \max_{\boldsymbol{w}, b} \frac {2} {\left \| \boldsymbol {w} \right \|} \\
@@ -74,6 +74,17 @@ $$
 $$
 
 仅需最大化$\left \| \boldsymbol {w} \right \| ^ {-1}$，这等价于最小化$\left \| \boldsymbol {w} \right \| ^{2}$，即：
+$$
+\begin{align}
+& \min_{\boldsymbol{w}, b}\frac{1}{2}\left \| \boldsymbol {w}^2 \right \| \\
+& s.t. \quad y_i ( \boldsymbol{w}^{T} \boldsymbol{x}_{i} + b) \geq 1, & i = 1, 2, ..., m
+\end{align}
+$$
+
+> Note:
+> - $ \max\_{\boldsymbol{w}, b} \frac {2} {\left \| \boldsymbol {w} \right \|} $的含义是当$\frac {2} {\left \| \boldsymbol {w} \right \|}$取得最大值时$\boldsymbol{w}$与$b$的值。
+> - $\left \| \boldsymbol {w} \right \| ^ {-1}$与$\left \| \boldsymbol {w} \right \| ^{2}$的等价与[正则化](TODO)有关。
+> - 
 
 
 # References
