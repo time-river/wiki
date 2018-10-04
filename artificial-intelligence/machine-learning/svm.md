@@ -86,7 +86,7 @@ $$
 > - $\left \| \boldsymbol {w} \right \| ^ {-1}$与$\left \| \boldsymbol {w} \right \| ^{2}$的等价与[正则化](TODO)有关。
 > - $y_i ( \boldsymbol{w}^{T} \boldsymbol{x}_{i} + b) \geq 1$是一个trick，用于符号的转换。
 
-
+这是一个凸优化[9][9]问题，更具体地说，这是一个二次优化[10][10]问题，属于运筹学的范畴
 # References
 
 [1]: https://zh.wikipedia.org/wiki/支持向量机 "Wikipedia: 支持向量机"
@@ -97,3 +97,5 @@ $$
 [6]: https://my.oschina.net/hosee/blog/471475 "VC维再理解"
 [7]: http://www.flickering.cn/machine_learning/2015/04/vc%E7%BB%B4%E7%9A%84%E6%9D%A5%E9%BE%99%E5%8E%BB%E8%84%89/ "VC维的来龙去脉"
 [8]: https://zh.wikipedia.org/wiki/%E8%B6%85%E5%B9%B3%E9%9D%A2 "Wikipedia: 超平面"
+[9]: https://zh.wikipedia.org/wiki/%E5%87%B8%E5%84%AA%E5%8C%96 "Wikipedia: 凸优化"
+[10]: https://zh.wikipedia.org/wiki/%E4%BA%8C%E6%AC%A1%E8%A7%84%E5%88%92 "Wikipedia: 二次优化"
