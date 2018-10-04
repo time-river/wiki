@@ -18,6 +18,10 @@
 
 ## 容器
 
+## 人工智能
+- 机器学习
+  - [支持向量机（Support Vector Machine, SVM）](/artificial-intelligence/machine-learning/svm)
+
 - [docker](/container/docker)
 ## 算法
 - [LeetCode](/algorithm/leetcode)
