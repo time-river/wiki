@@ -27,26 +27,38 @@ SVM是建立在统计学习理论的*VC维*理论和*结构风险*最小原理�
 >> 统计学习的目标从经验风险最小化变为寻求经验风险与置信风险的和最小化，即*结构风险（structural risk）*最小化。[4][4]
 
 # SVC
-给定训练样本集$D = {(\boldsymbol {x_1}, y_1), (\boldsymbol {x_2}, y_2}, ..., (\boldsymbol {x_m}, y_m); y_i \in {-1. +1}$。
+给定训练样本集$D = {(\boldsymbol {x}_1, y_1), (\boldsymbol {x}_2, y_2}, ..., (\boldsymbol {x}_m, y_m); y_i \in {-1. +1}$。
 
 在样本空间中，超平面可通过如下的线性方程来描述（$\boldsymbol {w}$为空间法向量，决定超平面的方向；$b$为位移项，决定了超平面与原点之间的距离）：
 $$
-\boldsymbol {w}^{T} \boldsymbol {x} + b = 0
-s.t. \boldsymbol {w} = (w_1; w_2; ...; w_d}
+\begin{align}
+& \boldsymbol {w}^{T} \boldsymbol {x} + b = 0 \\
+& s.t. \quad\boldsymbol {w} = (w_1; w_2; ...; w_d)
+\end{align}
 $$
 
 空间中的任意一点$\boldsymbol {w}$到超平面的距离为：
 $$
-r = \frac {}{}
+r = \frac {\left| \boldsymbol {w}^{T} \boldsymbol {x} + b \right|} {\left \| \boldsymbol {w} \right \|}
 $$
+
+假设超平面能将训练样本正确分类，即$(\boldsymbol {x}_i, y_i) \in D$，有：
+$$
+\begin{cases}
+\boldsymbol {w}^{T} + b \geq +1, & y_i = +1 \\
+\boldsymbol {w}^{T} + b \leq -1, & y_i = -1
+\end{cases}
+$$
+
+可得间隔的表达式为：
+$$
+\gamma = \frac{2}{\left \| \boldsymbol {w} \right \|}
+$$
+
 ## 硬间隔（Hard Margin）
 
 ![Hard Margin](/uploads/2018/hard-margin.png "Hard Margin")
 
-间隔的表达式为：
-$$
-\gamma = \frac{2}{\left \| \boldsymbol {w} \right \|}
-$$
 
 
 # References
