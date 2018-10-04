@@ -39,7 +39,7 @@ s.t. \quad\boldsymbol {w} = (w_1; w_2; ...; w_d)
 \end{align}
 $$
 
-> Note: $s.t.$为$subject \quad to$的缩写，限制条件之意。
+> Note: *s.t.*为*subject to*的缩写，限制条件之意。
 
 ![Hard Margin](/uploads/2018/hard-margin.png "Hard Margin")
 
@@ -82,9 +82,9 @@ $$
 $$
 
 > Note:
-> - $ \max\_{\boldsymbol{w}, b} \frac {2} {\left \| \boldsymbol {w} \right \|} $的含义是当$\frac {2} {\left \| \boldsymbol {w} \right \|}$取得最大值时$\boldsymbol{w}$与$b$的值。
+> - $ \max_{\boldsymbol{w}, b} \frac {2} {\left \| \boldsymbol {w} \right \|} $的含义是当$\frac {2} {\left \| \boldsymbol {w} \right \|}$取得最大值时$\boldsymbol{w}$与$b$的值。
 > - $\left \| \boldsymbol {w} \right \| ^ {-1}$与$\left \| \boldsymbol {w} \right \| ^{2}$的等价与[正则化](TODO)有关。
-> - 
+> - $y_i ( \boldsymbol{w}^{T} \boldsymbol{x}_{i} + b) \geq 1$
 
 
 # References
