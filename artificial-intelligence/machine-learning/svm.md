@@ -34,7 +34,7 @@ SVM是建立在统计学习理论的*VC维*理论和*结构风险*最小原理�
 
 间隔的表达式为：
 $$
-\gamma = \frac{2}{w}
+\gamma = \frac{2}{\left \|w \right \|}
 $$
 # References
 
