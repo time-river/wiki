@@ -68,7 +68,7 @@ $$
 为了在最大化间隔下求得超平面，有：
 $$
 \begin{align}
-& \max_{\boldsymbol{w}, b} \frac {2} {\left \| \boldsymbol {w} \right \|} \\
+& \max\limits_{\boldsymbol{w}, b} \frac {2} {\left \| \boldsymbol {w} \right \|} \\
 & s.t. \quad y_i ( \boldsymbol{w}^{T} \boldsymbol{x}_{i} + b) \geq 1, & i = 1, 2, ..., m
 \end{align}
 $$
@@ -76,13 +76,13 @@ $$
 仅需最大化$\left \| \boldsymbol {w} \right \| ^ {-1}$，这等价于最小化$\left \| \boldsymbol {w} \right \| ^{2}$，即：
 $$
 \begin{align}
-& \min_{\boldsymbol{w}, b}\frac{1}{2}\left \| \boldsymbol {w}^2 \right \| \\
+& \min\limits_{\boldsymbol{w}, b}\frac{1}{2}\left \| \boldsymbol {w}^2 \right \| \\
 & s.t. \quad y_i ( \boldsymbol{w}^{T} \boldsymbol{x}_{i} + b) \geq 1, & i = 1, 2, ..., m
 \end{align}
 $$
 
 > Note:
-> - $ \max_{\boldsymbol{w}, b} \frac {2} {\left \| \boldsymbol {w} \right \|} $的含义是当$\frac {2} {\left \| \boldsymbol {w} \right \|}$取得最大值时$\boldsymbol{w}$与$b$的值。
+> - $ \max\limits_{\boldsymbol{w}, b} \frac {2} {\left \| \boldsymbol {w} \right \|} $的含义是当$\frac {2} {\left \| \boldsymbol {w} \right \|}$取得最大值时$\boldsymbol{w}$与$b$的值。
 > - $\left \| \boldsymbol {w} \right \| ^ {-1}$与$\left \| \boldsymbol {w} \right \| ^{2}$的等价与[正则化](TODO)有关。
 > - $y_i ( \boldsymbol{w}^{T} \boldsymbol{x}_{i} + b) \geq 1$
 
