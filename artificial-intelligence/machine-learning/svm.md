@@ -82,9 +82,9 @@ $$
 $$
 
 > Note:
-> - $\max\limits_{\boldsymbol{w}, b} \frac {2} {\left \| \boldsymbol {w} \right \|}$的含义是当$\frac {2} {\left \| \boldsymbol {w} \right \|}$取得最大值时$\boldsymbol{w}$与$b$的值。
+> - $\max\limits_{\boldsymbol{w}, b} \frac {2} {\left \| \boldsymbol {w} \right \|}$的含义为当$\frac {2} {\left \| \boldsymbol {w} \right \|}$取得最大值时，$\boldsymbol{w}$与$b$的取值。
 > - $\left \| \boldsymbol {w} \right \| ^ {-1}$与$\left \| \boldsymbol {w} \right \| ^{2}$的等价与[正则化](TODO)有关。
-> - $y_i ( \boldsymbol{w}^{T} \boldsymbol{x}_{i} + b) \geq 1$
+> - $y_i ( \boldsymbol{w}^{T} \boldsymbol{x}_{i} + b) \geq 1$是一个trick，用于符号的转换。
 
 
 # References
