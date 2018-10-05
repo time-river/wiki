@@ -43,7 +43,7 @@ $$
 
 ![Hard Margin](/uploads/2018/hard-margin.png "Hard Margin")
 
-空间中的任意一点$\boldsymbol {w}$到超平面的距离为：
+空间中的任意一点$\boldsymbol {x}$到超平面的几何距离为：
 $$
 r = \frac {\left| \boldsymbol {w}^{T} \boldsymbol {x} + b \right|} {\left \| \boldsymbol {w} \right \|}
 $$
@@ -61,7 +61,7 @@ $$
 \gamma = \frac{2}{\left \| \boldsymbol {w} \right \|}
 $$
 
-## 硬间隔（Hard Margin）
+## 硬间隔（Hard Margin）上的原始问题
 
 硬间隔指的是：假设这些数据全部线性可分，即存在一个超平面能将不同类的样本完全划分开，所有样本都必须划分正确。
 
@@ -69,7 +69,7 @@ $$
 $$
 \begin{align}
 & \max\limits_{\boldsymbol{w}, b} \frac {2} {\left \| \boldsymbol {w} \right \|} \\
-& s.t. \quad y_i ( \boldsymbol{w}^{T} \boldsymbol{x}_{i} + b) \geq 1, & i = 1, 2, ..., m
+& s.t. \  y_i ( \boldsymbol{w}^{T} \boldsymbol{x}_{i} + b) \geq 1, & i = 1, 2, ..., m
 \end{align}
 $$
 
@@ -77,7 +77,7 @@ $$
 $$
 \begin{align}
 & \min\limits_{\boldsymbol{w}, b}\frac{1}{2}\left \| \boldsymbol {w}^2 \right \| \\
-& s.t. \quad y_i ( \boldsymbol{w}^{T} \boldsymbol{x}_{i} + b) \geq 1, & i = 1, 2, ..., m
+& s.t. \  y_i ( \boldsymbol{w}^{T} \boldsymbol{x}_{i} + b) \geq 1, & i = 1, 2, ..., m
 \end{align}
 $$
 
@@ -86,7 +86,40 @@ $$
 > - $\left \| \boldsymbol {w} \right \| ^ {-1}$与$\left \| \boldsymbol {w} \right \| ^{2}$的等价与[正则化](TODO)有关。
 > - $y_i ( \boldsymbol{w}^{T} \boldsymbol{x}_{i} + b) \geq 1$是一个trick，用于符号的转换。
 
-这是一个凸优化[9][9]问题，更具体地说，这是一个二次优化[10][10]问题，属于运筹学的范畴
+这是一个*凸优化*[9][9]问题，更具体地说，这是一个*二次优化（ Quadratic Programming，QP）*[10][10]问题，即凸二次优化问题，属于*运筹学*[11][11]的范畴。它可以用任何现成的二次规划算法求解。
+
+## 对偶问题（Dual Problem）
+这个凸二次优化问题有着特殊的结构，可以通过*拉格朗日乘数（Lagrange Multiplier）*[12][12]将一个有$n$个变量与$k$个约束条件的最优化问题转换为一个解有$n + k$个变量的方程组的解的问题，得到其对偶问题。
+
+根据$m$个约束条件，引入$m$个*拉格朗日乘子*，记为$\boldsymbol {\alpha} = (\alpha_1, \alpha_2, ..., \alpha_m)$，则该问题的拉格朗日函数可写为：
+$$
+\mathcal{L}(\boldsymbol{w}, b, \boldsymbol{\alpha}) = \frac{1}{2}\left \| \boldsymbol{w} \right \|^{2} + \sum_{i=1}^{m} \alpha_i (1 - y_i(\boldsymbol{w}^T\boldsymbol{x}_i + b))
+$$
+
+对$\mathcal{L}(\boldsymbol{w}, b, \boldsymbol{\alpha})$关于$\boldsymbol{w}$和$b$求极值，可得条件：
+$$
+\boldsymbol{w} = \sum_{i=1}^{m}\alpha_i y_i \boldsymbol{x}_i
+$$
+
+代回原公式，可得到*对偶形式（Dual Representation）*：
+$$
+\max_{\boldsymbol{\alpha}} = \sum_{i=1}^{m}\alpha_i - \frac{1}{2} \sum_{i=1}^{m}\sum_{j=1}^{m}\lambda_i \lambda_j \boldsymbol{x}_i^T \boldsymbol{x}_j \\
+\begin{align}
+& s.t. & \quad \sum_{i=1}^{m}\alpha_i y_i = 0, \\
+&& \alpha_i \geq 0, \ i = 1, 2, 3, ..., m
+\end{align}
+$$
+
+解出$\boldsymbol{\alpha}$后，可得到模型：
+$$
+\begin{split}
+f(\boldsymbol{x}) &= \boldsymbol{w}^T \boldsymbol{x} + b \\
+&= \sum_{i=1}^{m}\alpha_i y_i \boldsymbol{x}_i^T \boldsymbol{x} + b
+\end{split}
+$$
+
+### Karush-Kuhn-Tucker（KTT)条件
+
 # References
 
 [1]: https://zh.wikipedia.org/wiki/支持向量机 "Wikipedia: 支持向量机"
@@ -99,3 +132,5 @@ $$
 [8]: https://zh.wikipedia.org/wiki/%E8%B6%85%E5%B9%B3%E9%9D%A2 "Wikipedia: 超平面"
 [9]: https://zh.wikipedia.org/wiki/%E5%87%B8%E5%84%AA%E5%8C%96 "Wikipedia: 凸优化"
 [10]: https://zh.wikipedia.org/wiki/%E4%BA%8C%E6%AC%A1%E8%A7%84%E5%88%92 "Wikipedia: 二次优化"
+[11]: https://zh.wikipedia.org/wiki/%E9%81%8B%E7%B1%8C%E5%AD%B8 "Wikipedia: 运筹学"
+[12]: https://zh.wikipedia.org/wiki/%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E4%B9%98%E6%95%B0 "Wikipedia: 拉格朗日乘数"
