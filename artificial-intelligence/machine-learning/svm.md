@@ -59,10 +59,11 @@ $$
 \gamma = \frac{2}{\left \| \boldsymbol {w} \right \|}
 $$
 
-## 硬间隔（Hard Margin）上的原始问题
+## 硬间隔（Hard Margin）
 
-硬间隔指的是：假设这些数据全部线性可分，即存在一个超平面能将不同类的样本完全划分开，所有样本都必须划分正确。
+硬间隔指的是：假设这些数据**全部线性可分**，即存在一个超平面能将不同类的样本完全划分开，所有样本都必须划分正确。
 
+### 原始问题（Primal Problem）
 为了在最大化间隔下求得超平面，有：
 $$
 \begin{align}
@@ -86,7 +87,7 @@ $$
 
 这是一个*凸优化*[9][9]问题，更具体地说，这是一个*二次优化（ Quadratic Programming，QP）*[10][10]问题，即凸二次优化问题，属于*运筹学*[11][11]的范畴。它可以用任何现成的二次规划算法求解。
 
-## 对偶问题（Dual Problem）
+### 对偶问题（Dual Problem）
 这个凸二次优化问题有着特殊的结构，可以通过*拉格朗日乘数法（Lagrange Multiplier）*[12][12]将一个有$n$个变量与$k$个约束条件的最优化问题转换为一个解有$n + k$个变量的方程组的解的问题，得到其对偶问题，它是解决此类问题的更高效解法。
 
 > Note:
@@ -94,8 +95,20 @@ $$
 
 根据$m$个约束条件，引入$m$个*拉格朗日乘子*，记为$\boldsymbol {\alpha} = (\alpha_1, \alpha_2, ..., \alpha_m)$，则该问题的拉格朗日函数可写为：
 $$
-\mathcal{L}(\boldsymbol{w}, b, \boldsymbol{\alpha}) = \frac{1}{2}\left \| \boldsymbol{w} \right \|^{2} + \sum_{i=1}^{m} \alpha_i (1 - y_i(\boldsymbol{w}^T\boldsymbol{x}_i + b))
+\mathcal{L}(\boldsymbol{w}, b, \boldsymbol{\alpha}) = \frac{1}{2}\left \| \boldsymbol{w} \right \|^{2} + \sum_{i=1}^{m} \alpha_i (1 - y_i(\boldsymbol{w}^T\boldsymbol{x}_i + b)) \\
+s.t.
 $$
+
+KTT条件为：
+$$
+\begin{cases}
+\alpha_i \geq 0 \\
+y_i f(\boldsymbol{x}_i) - 1 \geq 1 \\
+\alpha_i(y_i f(\boldsymbol{x}_i - 1) = 0
+\end{cases}
+$$
+
+> TODO: $\alpha_i(y_i f(\boldsymbol{x}_i - 1) = 0$ 为什么一定成立？
 
 对$\mathcal{L}(\boldsymbol{w}, b, \boldsymbol{\alpha})$关于$\boldsymbol{w}$和$b$求极值，可得条件：
 $$
@@ -104,12 +117,14 @@ $$
 
 代回原公式，可得到*对偶形式（Dual Representation）*：
 $$
-\max_{\boldsymbol{\alpha}} = \sum_{i=1}^{m}\alpha_i - \frac{1}{2} \sum_{i=1}^{m}\sum_{j=1}^{m}\lambda_i \lambda_j \boldsymbol{x}_i^T \boldsymbol{x}_j \\
+\max_{\boldsymbol{\alpha}} = \sum_{i=1}^{m}\alpha_i - \frac{1}{2} \sum_{i=1}^{m}\sum_{j=1}^{m} \alpha_i \alpha_j y_i y_j \boldsymbol{x}_i^T \boldsymbol{x}_j \\
 \begin{align}
 & s.t. & \quad \sum_{i=1}^{m}\alpha_i y_i = 0, \\
 & & \alpha_i \geq 0, \ i = 1, 2, 3, ..., m
 \end{align}
 $$
+
+> 求解$\boldsymbol{\alpha}$可用*序列最小优化算法（Sequential minimal optimization, SMO）*[14][14]。
 
 解出$\boldsymbol{\alpha}$后，可得到模型：
 $$
@@ -119,7 +134,38 @@ f(\boldsymbol{x}) &= \boldsymbol{w}^T \boldsymbol{x} + b \\
 \end{split}
 $$
 
-从对偶问题解出的$\alpha_i$是
+## 软间隔（Soft Margin）
+![Soft Margin](/uploads/2018/soft-margin.png "Soft Margin")
+
+假定训练样本在样本空间或特征空间中**并非线性可分**，缓解该问题的一个方法是允许SVM在一些样本上出错，因此引入了软间隔的概念。与硬间隔相比，它增加了*惩罚因子（Cost）*、*损失函数（Loss Function）*/*替代损失函数（Surrogate Loss Function）*/*松弛变量（Slack Variables）*。
+
+> Note:
+> - 惩罚因子
+>> 符号通常为$C$，代表着对不满足约束样本的重视程度。$C$越大，代表着越重视不满足约束样本。
+> - 损失函数与替代损失[15][15]
+>> 损失函数为$l_{0/1} = \begin{cases} 1, & \mbox{if } z \le 0 \\ 0, & \mbox{otherwise} \end{cases}$。
+>> 但$$l_{0/1}$数学性质不好，通常用一些其他函数替代它，这些函数称之为替代损失函数。
+> - 松弛变量
+>> 符号通常为$\xi$，经损失/替代损失函数$f$映射而来，即$\xi = f(z)$。并非每个数据点都有松弛变量，只有离群点（不满足约束的样本）才具有，它反映的是对应的点到底离群有多远，值越大代表离群越远。
+
+这样原始问题可重写为：
+$$
+\min\limits_{\boldsymbol{w}, b, \xi_i}\frac{1}{2}\left \| \boldsymbol {w}^2 \right \| + C \sum_{i=1}^{m}\xi_i \\
+s.t. \ y_i(\boldsymbol{w}^T \boldsymbol{x}_i + b ) \geq 1 - \xi_i,
+\xi \geq 0, \quad i = 1, 2, ..., m
+$$
+
+也有对偶形：
+$$
+\max_{\boldsymbol{\alpha}} = \sum_{i=1}^{m}\alpha_i - \frac{1}{2} \sum_{i=1}^{m}\sum_{j=1}^{m} \alpha_i \alpha_j y_i y_j \boldsymbol{x}_i^T \boldsymbol{x}_j \\
+\begin{align}
+& s.t. & \quad \sum_{i=1}^{m}\alpha_i y_i = 0, \\
+& & 0 \leq \alpha_i \leq C, \ i = 1, 2, 3, ..., m
+\end{align}
+$$
+
+> TODO: $\xi$咋不见了?
+
 # References
 
 [1]: https://zh.wikipedia.org/wiki/支持向量机 "Wikipedia: 支持向量机"
@@ -135,3 +181,5 @@ $$
 [11]: https://zh.wikipedia.org/wiki/%E9%81%8B%E7%B1%8C%E5%AD%B8 "Wikipedia: 运筹学"
 [12]: https://zh.wikipedia.org/wiki/%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E4%B9%98%E6%95%B0 "Wikipedia: 拉格朗日乘数"
 [13]: https://zh.wikipedia.org/wiki/%E5%8D%A1%E7%BE%85%E9%9C%80%EF%BC%8D%E5%BA%AB%E6%81%A9%EF%BC%8D%E5%A1%94%E5%85%8B%E6%A2%9D%E4%BB%B6 "Wikipedia: 卡羅需－庫恩－塔克條件"
+[14]: https://zh.wikipedia.org/wiki/%E5%BA%8F%E5%88%97%E6%9C%80%E5%B0%8F%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95 "Wikipedia: 序列最小优化算法"
+[15]: https://zh.wikipedia.org/wiki/%E5%88%86%E9%A1%9E%E5%95%8F%E9%A1%8C%E4%B9%8B%E6%90%8D%E5%A4%B1%E5%87%BD%E6%95%B8 "Wikipedia: 分类问题之损失函数"
