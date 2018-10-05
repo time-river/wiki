@@ -166,6 +166,9 @@ $$
 
 > TODO: $\xi$咋不见了?
 
+## 核技巧（Kernel Trick）
+
+
 # References
 
 [1]: https://zh.wikipedia.org/wiki/支持向量机 "Wikipedia: 支持向量机"
