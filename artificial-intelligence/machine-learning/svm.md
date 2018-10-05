@@ -107,8 +107,8 @@ $$
 $$
 \max_{\boldsymbol{\alpha}} = \sum_{i=1}^{m}\alpha_i - \frac{1}{2} \sum_{i=1}^{m}\sum_{j=1}^{m}\lambda_i \lambda_j \boldsymbol{x}_i^T \boldsymbol{x}_j \\
 \begin{align}
-& s.t. & \quad \sum_{i=1}^{m}\alpha_i y_i = 0, \\
-&& \alpha_i \geq 0, \ i = 1, 2, 3, ..., m
+\& s.t. & \quad \sum_{i=1}^{m}\alpha_i y_i = 0, \\
+\&\& \alpha_i \geq 0, \ i = 1, 2, 3, ..., m
 \end{align}
 $$
 
