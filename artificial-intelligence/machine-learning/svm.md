@@ -91,12 +91,11 @@ $$
 这个凸二次优化问题有着特殊的结构，可以通过*拉格朗日乘数法（Lagrange Multiplier）*[12][12]将一个有$n$个变量与$k$个约束条件的最优化问题转换为一个解有$n + k$个变量的方程组的解的问题，得到其对偶问题，它是解决此类问题的更高效解法。
 
 > Note:
-> ”通过拉格朗日乘数法...“这种说法并不严谨.拉格朗日乘数法用于处理等式的约束优化问题，而*Karush-Kuhn-Tucker（KTT)条件*[13][13]将拉格朗日乘数法进一步推广至不等式中。
+> ”通过拉格朗日乘数法...“这种说法个人觉得并不严谨。因拉格朗日乘数法用于处理等式的约束优化问题，而*Karush-Kuhn-Tucker（KTT)条件*[13][13]将拉格朗日乘数法进一步推广至不等式中，所以提起SVM也会提起KTT条件。
 
 根据$m$个约束条件，引入$m$个*拉格朗日乘子*，记为$\boldsymbol {\alpha} = (\alpha_1, \alpha_2, ..., \alpha_m)$，则该问题的拉格朗日函数可写为：
 $$
-\mathcal{L}(\boldsymbol{w}, b, \boldsymbol{\alpha}) = \frac{1}{2}\left \| \boldsymbol{w} \right \|^{2} + \sum_{i=1}^{m} \alpha_i (1 - y_i(\boldsymbol{w}^T\boldsymbol{x}_i + b)) \\
-s.t.
+\mathcal{L}(\boldsymbol{w}, b, \boldsymbol{\alpha}) = \frac{1}{2}\left \| \boldsymbol{w} \right \|^{2} + \sum_{i=1}^{m} \alpha_i (1 - y_i(\boldsymbol{w}^T\boldsymbol{x}_i + b))
 $$
 
 KTT条件为：
@@ -137,7 +136,7 @@ $$
 ## 软间隔（Soft Margin）
 ![Soft Margin](/uploads/2018/soft-margin.png "Soft Margin")
 
-假定训练样本在样本空间或特征空间中**并非线性可分**，缓解该问题的一个方法是允许SVM在一些样本上出错，因此引入了软间隔的概念。与硬间隔相比，它增加了*惩罚因子（Cost）*、*损失函数（Loss Function）*/*替代损失函数（Surrogate Loss Function）*/*松弛变量（Slack Variables）*。
+假定训练样本在样本空间或特征空间中并**非线性可分**，缓解该问题的一个方法是允许SVM在一些样本上出错，因此引入了软间隔的概念。与硬间隔相比，它增加了*惩罚因子（Cost）*、*损失函数（Loss Function）*/*替代损失函数（Surrogate Loss Function）*/*松弛变量（Slack Variables）*。
 
 > Note:
 > - 惩罚因子
@@ -155,6 +154,7 @@ s.t. \ y_i(\boldsymbol{w}^T \boldsymbol{x}_i + b ) \geq 1 - \xi_i,
 \xi \geq 0, \quad i = 1, 2, ..., m
 $$
 
+
 也有对偶形：
 $$
 \max_{\boldsymbol{\alpha}} = \sum_{i=1}^{m}\alpha_i - \frac{1}{2} \sum_{i=1}^{m}\sum_{j=1}^{m} \alpha_i \alpha_j y_i y_j \boldsymbol{x}_i^T \boldsymbol{x}_j \\
@@ -166,9 +166,36 @@ $$
 
 > TODO: $\xi$咋不见了?
 
+这是由引入拉格朗日乘子向量$\boldsymbol {\alpha}$与$\boldsymbol {\mu}$后拉格朗日函数得到。
+$$
+\mathcal{L}(\boldsymbol{w}, b, \boldsymbol{\alpha}, \boldsymbol{\xi}, \boldsymbol{\mu}) = \frac{1}{2}\left \| \boldsymbol{w} \right \|^{2} + C\sum_{i=1}^{m}\xi_i + \sum_{i=1}^{m} \alpha_i (1 - y_i(\boldsymbol{w}^T\boldsymbol{x}_i + b) - \xi_i) - \sum_{i=1}^{m}\mu_i\xi_i
+$$
 ## 核技巧（Kernel Trick）
+# SVR
+![Support Vector Regression](/uploads/2018/svr.png "Support Vector Regression")
 
+与SVC相比，支持向量回归（Support Vector Regression, SVR）必须容忍偏差。假设能容忍$f(\boldsymbol{x})$与$y$之间最多有$\epsilon$的偏差，即仅当$f(\boldsymbol{x})$与$y$之间差的绝对值大于$\epsilon$时才计算损失，这相当于以$f(\boldsymbol{x})$为中心，构建了一个宽度为$2\epsilon$的间隔带，若训练样本落入此间隔带，则被认为是被预测正确的。若引入松弛变量，它的原始问题解为：
+$$
+\min\limits_{\boldsymbol{w}, b, \xi_i, \xi_i^{*}} = \frac {1} {2} \left \| \boldsymbol{w} \right \|^{2} + C \sum_{i=1}^{m}(\xi_i + \xi_i^{*}) \\
+\begin{align}
+& s.t. & \quad f(\boldsymbol{x}_i - y_i \leq \epsilon + \xi_i \\
+& & y_i - f(\boldsymbol{x}_i) \leq \epsilon + \xi_i^{*} \\
+& & \xi_i \geq 0, \ \xi_i^{*} \geq 0, \ i = 1, 2, ..., m
+\end{align}
+$$
 
+> Note: 
+> 关于$\xi$与$\xi^{*}$
+>> 间隔带两侧的松弛程度可能有所不同。
+
+类似地，也可以得到引入拉格朗日乘子向量$\boldsymbol {\alpha}$、$\boldsymbol {\alpha^{*}}$、$\boldsymbol {\mu}$和$\boldsymbol {\mu^{*}$后得到拉格朗日函数：
+$$
+\mathcal{L}(\boldsymbol{w}, b, \boldsymbol{\alpha}, \boldsymbol{\alpha^{*}}, \boldsymbol{\xi}, \boldsymbol{\xi^{*}}, \boldsymbol{\mu}, \boldsymbol{\mu^{*}}) = \frac{1}{2}\left \| \boldsymbol{w} \right \|^{2} + \sum_{i=1}^{m} \alpha_i (f(\boldsymbol{x}_i) - y_i - \epsilon - \xi_i) + \sum_{i=1}^{m}\alpha_i^{*}(y_i-f(\boldsymbol{x}_i) -\epsilon - \xi_i^{*}) - \sum_{i=1}^{m}\mu_i \xi_i + \sum_{i=1}^{m}\mu_i^{*}\xi_i^{*}
+$$
+
+得到其对偶型：
+$$
+$$
 # References
 
 [1]: https://zh.wikipedia.org/wiki/支持向量机 "Wikipedia: 支持向量机"
