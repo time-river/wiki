@@ -90,8 +90,7 @@ $$
 这个凸二次优化问题有着特殊的结构，可以通过*拉格朗日乘数法（Lagrange Multiplier）*[12][12]将一个有$n$个变量与$k$个约束条件的最优化问题转换为一个解有$n + k$个变量的方程组的解的问题，得到其对偶问题，它是解决此类问题的更高效解法。
 
 > Note:
-> ”通过拉格朗日乘数法...“这种说法并不严谨，拉格朗日乘数法用于处理等式的约束优化问题。*Karush-Kuhn-Tucker（KTT)条件*[13][13]将拉格朗日乘数法进一步推广至不等式。
-
+> ”通过拉格朗日乘数法...“这种说法并不严谨.拉格朗日乘数法用于处理等式的约束优化问题，而*Karush-Kuhn-Tucker（KTT)条件*[13][13]将拉格朗日乘数法进一步推广至不等式中。
 
 根据$m$个约束条件，引入$m$个*拉格朗日乘子*，记为$\boldsymbol {\alpha} = (\alpha_1, \alpha_2, ..., \alpha_m)$，则该问题的拉格朗日函数可写为：
 $$
@@ -107,8 +106,8 @@ $$
 $$
 \max_{\boldsymbol{\alpha}} = \sum_{i=1}^{m}\alpha_i - \frac{1}{2} \sum_{i=1}^{m}\sum_{j=1}^{m}\lambda_i \lambda_j \boldsymbol{x}_i^T \boldsymbol{x}_j \\
 \begin{align}
-\& s.t. & \quad \sum_{i=1}^{m}\alpha_i y_i = 0, \\
-\&\& \alpha_i \geq 0, \ i = 1, 2, 3, ..., m
+& s.t. & \quad \sum_{i=1}^{m}\alpha_i y_i = 0, \\
+& & \alpha_i \geq 0, \ i = 1, 2, 3, ..., m
 \end{align}
 $$
 
@@ -120,6 +119,7 @@ f(\boldsymbol{x}) &= \boldsymbol{w}^T \boldsymbol{x} + b \\
 \end{split}
 $$
 
+从对偶问题解出的$\alpha_i$是
 # References
 
 [1]: https://zh.wikipedia.org/wiki/支持向量机 "Wikipedia: 支持向量机"
