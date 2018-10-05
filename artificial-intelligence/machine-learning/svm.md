@@ -41,8 +41,6 @@ $$
 
 > Note: *s.t.*为*subject to*的缩写，限制条件之意。
 
-![Hard Margin](/uploads/2018/hard-margin.png "Hard Margin")
-
 空间中的任意一点$\boldsymbol {x}$到超平面的几何距离为：
 $$
 r = \frac {\left| \boldsymbol {w}^{T} \boldsymbol {x} + b \right|} {\left \| \boldsymbol {w} \right \|}
@@ -89,7 +87,11 @@ $$
 这是一个*凸优化*[9][9]问题，更具体地说，这是一个*二次优化（ Quadratic Programming，QP）*[10][10]问题，即凸二次优化问题，属于*运筹学*[11][11]的范畴。它可以用任何现成的二次规划算法求解。
 
 ## 对偶问题（Dual Problem）
-这个凸二次优化问题有着特殊的结构，可以通过*拉格朗日乘数（Lagrange Multiplier）*[12][12]将一个有$n$个变量与$k$个约束条件的最优化问题转换为一个解有$n + k$个变量的方程组的解的问题，得到其对偶问题。
+这个凸二次优化问题有着特殊的结构，可以通过*拉格朗日乘数法（Lagrange Multiplier）*[12][12]将一个有$n$个变量与$k$个约束条件的最优化问题转换为一个解有$n + k$个变量的方程组的解的问题，得到其对偶问题，它是解决此类问题的更高效解法。
+
+> Note:
+> ”通过拉格朗日乘数法...“这种说法并不严谨，拉格朗日乘数法用于处理等式的约束优化问题。*Karush-Kuhn-Tucker（KTT)条件*[13][13]将拉格朗日乘数法进一步推广至不等式。
+
 
 根据$m$个约束条件，引入$m$个*拉格朗日乘子*，记为$\boldsymbol {\alpha} = (\alpha_1, \alpha_2, ..., \alpha_m)$，则该问题的拉格朗日函数可写为：
 $$
@@ -118,8 +120,6 @@ f(\boldsymbol{x}) &= \boldsymbol{w}^T \boldsymbol{x} + b \\
 \end{split}
 $$
 
-### Karush-Kuhn-Tucker（KTT)条件
-
 # References
 
 [1]: https://zh.wikipedia.org/wiki/支持向量机 "Wikipedia: 支持向量机"
@@ -134,3 +134,4 @@ $$
 [10]: https://zh.wikipedia.org/wiki/%E4%BA%8C%E6%AC%A1%E8%A7%84%E5%88%92 "Wikipedia: 二次优化"
 [11]: https://zh.wikipedia.org/wiki/%E9%81%8B%E7%B1%8C%E5%AD%B8 "Wikipedia: 运筹学"
 [12]: https://zh.wikipedia.org/wiki/%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E4%B9%98%E6%95%B0 "Wikipedia: 拉格朗日乘数"
+[13]: https://zh.wikipedia.org/wiki/%E5%8D%A1%E7%BE%85%E9%9C%80%EF%BC%8D%E5%BA%AB%E6%81%A9%EF%BC%8D%E5%A1%94%E5%85%8B%E6%A2%9D%E4%BB%B6 "Wikipedia: 卡羅需－庫恩－塔克條件"
