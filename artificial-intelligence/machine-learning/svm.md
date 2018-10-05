@@ -125,13 +125,15 @@ $$
 
 > 求解$\boldsymbol{\alpha}$可用*序列最小优化算法（Sequential minimal optimization, SMO）*[14][14]。
 
-解出$\boldsymbol{\alpha}$后，可得到模型：
+解出$\boldsymbol{\alpha}$后，求得$\boldsymbol {w}$与$b$，可得到模型：
 $$
 \begin{split}
 f(\boldsymbol{x}) &= \boldsymbol{w}^T \boldsymbol{x} + b \\
 &= \sum_{i=1}^{m}\alpha_i y_i \boldsymbol{x}_i^T \boldsymbol{x} + b
 \end{split}
 $$
+
+> TODO：$\boldsymbol {w}$与$b$
 
 ## 软间隔（Soft Margin）
 ![Soft Margin](/uploads/2018/soft-margin.png "Soft Margin")
@@ -190,11 +192,22 @@ $$
 
 类似地，也可以得到引入拉格朗日乘子向量$\boldsymbol {\alpha}$、$\boldsymbol {\alpha^{*}}$、$\boldsymbol {\mu}$和$\boldsymbol {\mu^{*}$后得到拉格朗日函数：
 $$
-\mathcal{L}(\boldsymbol{w}, b, \boldsymbol{\alpha}, \boldsymbol{\alpha^{*}}, \boldsymbol{\xi}, \boldsymbol{\xi^{*}}, \boldsymbol{\mu}, \boldsymbol{\mu^{*}}) = \frac{1}{2}\left \| \boldsymbol{w} \right \|^{2} + \sum_{i=1}^{m} \alpha_i (f(\boldsymbol{x}_i) - y_i - \epsilon - \xi_i) + \sum_{i=1}^{m}\alpha_i^{*}(y_i-f(\boldsymbol{x}_i) -\epsilon - \xi_i^{*}) - \sum_{i=1}^{m}\mu_i \xi_i + \sum_{i=1}^{m}\mu_i^{*}\xi_i^{*}
+\mathcal{L}(\boldsymbol{w}, b, \boldsymbol{\alpha}, \boldsymbol{\alpha^{*}}, \boldsymbol{\xi}, \boldsymbol{\xi^{*}}, \boldsymbol{\mu}, \boldsymbol{\mu^{*}}) = \frac{1}{2}\left \| \boldsymbol{w} \right \|^{2} + \sum_{i=1}^{m} \alpha_i (f(\boldsymbol{x}_i) - y_i - \epsilon - \xi_i) + \sum_{i=1}^{m}\alpha_i^{*}(y_i-f(\boldsymbol{x}_i) -\epsilon - \xi_i^{*}) - \sum_{i=1}^{m}\mu_i \xi_i - \sum_{i=1}^{m}\mu_i^{*}\xi_i^{*}
 $$
 
 得到其对偶型：
 $$
+\max\limits_{\boldsymbol {\alpha}, \boldsymbol{\alpha^{*}}} \sum_{i=1}^{m} [y_i(\alpha_i^{*} - \alpha_i) - \epsilon(\alpha_i^{*} + \alpha_i)] -
+\frac {1}{2} \sum_{i=1}^{m}\sum_{j=1}^{m}(\alpha_i^{*}-\alpha_i)(\alpha_j^{*}-\alpha_j) \\
+s.t. \quad \sum_{i=1}^{m}(\alpha_i^{*}-\alpha_i) = 0, \\
+0 \leq \alpha_i, \alpha_i^{*} \leq C
+$$
+
+> TODO：$\boldsymbol {w}$与$b$
+
+从而，SVR解形如：
+$$
+f(\boldsymbol{x}) = \sum_{i=1}^{m}(\alpha_i^{*}-\alpha_i)\boldsymbol{x}_i^T\boldsymbol{x} + b
 $$
 # References
 
@@ -213,3 +226,4 @@ $$
 [13]: https://zh.wikipedia.org/wiki/%E5%8D%A1%E7%BE%85%E9%9C%80%EF%BC%8D%E5%BA%AB%E6%81%A9%EF%BC%8D%E5%A1%94%E5%85%8B%E6%A2%9D%E4%BB%B6 "Wikipedia: 卡羅需－庫恩－塔克條件"
 [14]: https://zh.wikipedia.org/wiki/%E5%BA%8F%E5%88%97%E6%9C%80%E5%B0%8F%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95 "Wikipedia: 序列最小优化算法"
 [15]: https://zh.wikipedia.org/wiki/%E5%88%86%E9%A1%9E%E5%95%8F%E9%A1%8C%E4%B9%8B%E6%90%8D%E5%A4%B1%E5%87%BD%E6%95%B8 "Wikipedia: 分类问题之损失函数"
+[16]: https://www.saedsayad.com/support_vector_machine_reg.htm "Support Vector Machine - Regression (SVR)"
