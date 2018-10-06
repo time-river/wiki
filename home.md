@@ -27,4 +27,8 @@
 ## 算法
 - [LeetCode](/algorithm/leetcode)
 
+# References
+- 线性代数
+	- [線代啟示錄](https://ccjou.wordpress.com/)
+ 
 ** 所有文章遵循[署名-非商业性使用 2.5 通用 (CC BY-NC 2.5) ](https://creativecommons.org/licenses/by-nc/2.5/deed.zh)协议。**
