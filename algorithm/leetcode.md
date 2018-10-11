@@ -9,4 +9,7 @@
 - [6. ZigZag Conversion](https://leetcode.com/problems/zigzag-conversion/description/)
 	* ×
 
+- [9. Palindrome Number](https://leetcode.com/problems/palindrome-number/description/)
+	* √
+
 
