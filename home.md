@@ -9,6 +9,8 @@
 - C++
 	- [C++中的`map`](programming-language/c++/map)
 
+- [regex in programming language](programming-language/regex)
+
 ## 操作系统
 
 - [系统调用](/operation-system/syscall)
