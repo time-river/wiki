@@ -18,6 +18,7 @@
 	* [内核态的系统调用过程](/operation-system/syscall/kernel-space)
 	* [Syscall table for Linux in AMD64](/operation-system/syscall/syscall-table-for-Linux-in-AMD64)
 - [命名空间（namespaces）](/namespaces)
+	- [uts namespaces](/namespaces/uts-namespaces)
 	- [mnt namespaces](/namespaces/mnt-namespaces)
 
 ## 容器
