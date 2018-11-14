@@ -28,6 +28,7 @@
 ## 人工智能
 - 机器学习
   - [支持向量机（Support Vector Machine, SVM）](/artificial-intelligence/machine-learning/svm)
+		- [Sequential Minimal Optimization Algothrim](/artificial-intelligence/machine-learning/svm/sequential-minimal-optimization-algothrim)
 
 ## 算法
 - [LeetCode](/algorithm/leetcode)
